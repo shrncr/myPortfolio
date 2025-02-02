@@ -46,85 +46,94 @@ const HonorsGrid = () => {
       <h2 className="text-3xl font-bold text-center text-slate-900 mb-6">Honors, Awards, and Affiliations</h2>
       <p className="text-center text-gray-600 mb-4">Click a card to learn more</p>
       <div className={`${isMobile ? "relative w-full" : "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"} gap-6`}>
-        {isMobile ? (
-          <>
-            <motion.div className="relative w-full overflow-hidden">
-              <motion.div
-                className="flex w-full"
-                animate={{ x: `-${currentIndex * 100}%` }}
-                transition={{ type: "tween", stiffness: 80, damping: 20 }}
-              >
-                {awards.map((award, index) => (
-                  <motion.div
-                    key={index}
-                    onClick={() => handleFlip(index)}
-                    className="flex-shrink-0 w-full"
-                  >
-                    <motion.div
-                      className="relative w-full h-48 transform-style-3d"
-                      animate={{ rotateY: flippedIndexes[index] ? 180 : 0 }}
-                      transition={{ duration: 0.6 }}
-                    >
-                      {/*front*/}
-                      <div className={`absolute w-full h-full bg-slate-800 p-6 rounded-xl shadow-lg text-white flex flex-col items-center justify-center backface-hidden ${flippedIndexes[index] ? "hidden" : ""}`}>
-                        <award.icon className="text-white text-5xl mb-2" />
-                        <h3 className="text-xl font-semibold">{award.title}</h3>
-                        <p className="text-md text- slate-200">{award.year}</p>
-                      </div>
-                      {/*back*/}
-                      <div className={`absolute w-full h-full bg-slate-900 p-6 rounded-xl shadow-lg text-white flex flex-col items-center justify-center backface-hidden ${flippedIndexes[index] ? "" : "hidden"}`} style={{ transform: "rotateY(180deg)" }}>
-                        <p className="text-center text-slate-200">{award.description}</p>
-                      </div>
-                    </motion.div>
-                  </motion.div>
-                ))}
-              </motion.div>
-              <button
-                onClick={prevSlide}
-                className="absolute top-1/2 left-2 transform -translate-y-1/2 bg-slate-600 p-2 rounded-full shadow-md hover:bg-slate-500 "
-              >
-                <ChevronLeft className="text-white w-6 h-6" />
-              </button>
-              <button
-                onClick={nextSlide}
-                className="absolute top-1/2 right-2 transform -translate-y-1/2 bg-slate-600 p-2 rounded-full shadow-md hover:bg-slate-500"
-              >
-                <ChevronRight className="text-white w-6 h-6" />
-              </button>
-              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-                {awards.map((_, index) => (
-                  <div
-                    key={index}
-                    className={`w-3 h-3 rounded-full ${currentIndex === index ? "bg-slate-600" : "bg-gray-300"}`}
-                  />
-                ))}
+        
+      {isMobile ? (
+  <>
+  {/* Left Arrow */}
+  <button
+        onClick={prevSlide}
+        className="absolute top-1/2 -left-6 transform -translate-y-1/2 bg-slate-600 p-2 rounded-full shadow-md hover:bg-slate-500"
+        style={{ zIndex: 1 }} // ensures it appears above the cards without overlap
+      >
+        <ChevronLeft className="text-white w-6 h-6" />
+      </button>
+      {/* Right Arrow */}
+      <button
+        onClick={nextSlide}
+        className="absolute top-1/2 -right-6 transform -translate-y-1/2 bg-slate-600 p-2 rounded-full shadow-md hover:bg-slate-500"
+        style={{ zIndex: 1 }} // ensures it appears above the cards without overlap
+      >
+        <ChevronRight className="text-white w-6 h-6" />
+      </button>
+    <motion.div className="relative w-full overflow-hidden">
+      <motion.div
+        className="flex w-full"
+        animate={{ x: `-${currentIndex * 100}%` }}
+        transition={{ type: "tween", stiffness: 80, damping: 20 }}
+      >
+        {awards.map((award, index) => (
+          <motion.div
+            key={index}
+            onClick={() => handleFlip(index)}
+            className="flex-shrink-0 w-full"
+          >
+            <motion.div
+              className="relative w-full h-48 transform-style-3d"
+              animate={{ rotateY: flippedIndexes[index] ? 180 : 0 }}
+              transition={{ duration: 0.6 }}
+            >
+              {/*front*/}
+              <div className={`absolute w-full h-full bg-slate-800 p-6 rounded-xl shadow-lg text-white flex flex-col items-center justify-center backface-hidden ${flippedIndexes[index] ? "hidden" : ""}`}>
+                <award.icon className="text-white text-5xl mb-2" />
+                <h3 className="text-xl font-semibold">{award.title}</h3>
+                <p className="text-md text- slate-200">{award.year}</p>
+              </div>
+              {/*back*/}
+              <div className={`absolute w-full h-full bg-slate-900 p-6 rounded-xl shadow-lg text-white flex flex-col items-center justify-center backface-hidden ${flippedIndexes[index] ? "" : "hidden"}`} style={{ transform: "rotateY(180deg)" }}>
+                <p className="text-center text-slate-200">{award.description}</p>
               </div>
             </motion.div>
-          </>
-        ) : (
-          awards.map((award, index) => (
-            <motion.div
-              key={index}
-              onClick={() => handleFlip(index)}
-              className="w-full cursor-pointer perspective"
-            >
-              <motion.div
-                className="relative w-full h-48 transform-style-3d"
-                animate={{ rotateY: flippedIndexes[index] ? 180 : 0 }}
-                transition={{ duration: 0.6 }}
-              >
-                <div className={`absolute w-full h-full bg-slate-800 p-6 rounded-xl shadow-lg text-white flex flex-col items-center justify-center text-center backface-hidden ${flippedIndexes[index] ? "hidden" : ""}`}>
-                  <award.icon className="text-white text-5xl mb-2" />
-                  <h3 className="text-xl font-semibold">{award.title}</h3>
-                  <p className="text-md text- slate-200">{award.year}</p>
-                </div>
-                <div className={`absolute w-full h-full bg-slate-900 p-6 rounded-xl shadow-lg text-white flex flex-col items-center justify-center backface-hidden ${flippedIndexes[index] ? "" : "hidden"}`} style={{ transform: "rotateY(180deg)" }}>
-                  <p className="text-center text-slate-200">{award.description}</p>
-                </div>
-              </motion.div>
-            </motion.div>
-          ))
-        )}
+          </motion.div>
+        ))}
+      </motion.div>
+      
+      
+
+      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+        {awards.map((_, index) => (
+          <div
+            key={index}
+            className={`w-3 h-3 rounded-full ${currentIndex === index ? "bg-slate-600" : "bg-gray-300"}`}
+          />
+        ))}
+      </div>
+    </motion.div>
+  </>
+) : (
+  awards.map((award, index) => (
+    <motion.div
+      key={index}
+      onClick={() => handleFlip(index)}
+      className="w-full cursor-pointer perspective"
+    >
+      <motion.div
+        className="relative w-full h-48 transform-style-3d"
+        animate={{ rotateY: flippedIndexes[index] ? 180 : 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        <div className={`absolute w-full h-full bg-slate-800 p-6 rounded-xl shadow-lg text-white flex flex-col items-center justify-center text-center backface-hidden ${flippedIndexes[index] ? "hidden" : ""}`}>
+          <award.icon className="text-white text-5xl mb-2" />
+          <h3 className="text-xl font-semibold">{award.title}</h3>
+          <p className="text-md text- slate-200">{award.year}</p>
+        </div>
+        <div className={`absolute w-full h-full bg-slate-900 p-6 rounded-xl shadow-lg text-white flex flex-col items-center justify-center backface-hidden ${flippedIndexes[index] ? "" : "hidden"}`} style={{ transform: "rotateY(180deg)" }}>
+          <p className="text-center text-slate-200">{award.description}</p>
+        </div>
+      </motion.div>
+    </motion.div>
+  ))
+)}
+
       </div>
     </div>
   );
