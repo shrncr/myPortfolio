@@ -9,8 +9,8 @@ import HonorsGrid from "./portfolio/components/awards";
 import Home from "./portfolio/components/multiOption";
 import InfiniteSlider from "./portfolio/components/skillsSlider";
 import NavBar from "./portfolio/components/navbar";
-import GitHubIcon from '@mui/icons-material/GitHub';
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import GitHubIcon from  '@mui/icons-material/GitHub';
+import LinkedInIcon from  '@mui/icons-material/LinkedIn';
 
 const PortfolioContent = () => {
   const [questionStatus, setQuestionSatus] = useState(1);
@@ -69,9 +69,9 @@ const PortfolioContent = () => {
       academic: false,
       professional: true,
       title: "Full Stack Developer",
-      company: "University of Tampa/ Glazer Children's Museum",
+      company: "University of Tampa/ Glazer Children &as Museum",
       date: "Jan. 2024 - Aug. 2024",
-      description: "Developed web application for Glazer Children's museum with a team of undergraduates. Additionally, independently deployed, maintained, tested, and improved application May-August."
+      description: "Developed web application for Glazer Children &as museum with a team of undergraduates. Additionally, independently deployed, maintained, tested, and improved application May-August."
     },
     {
       academic: true,
@@ -91,7 +91,7 @@ const PortfolioContent = () => {
     }
   ];
 
-  // Filter experiences based on the user's choice of "academic", "professional", or "both"
+  // Filter experiences based on the user &as choice of "academic", "professional", or "both"
 
   const { portfolioType, setPortfolioType } = usePortfolio();
   useEffect(()=>{
@@ -124,16 +124,16 @@ useEffect(() => {
           {questionStatus == 0 ? (
             <div className="flex-row lg:w-3/4 md:w-3/4 max-w-2xl px-6 lg:px-12 text-left justify-center lg:text-left ">
               <h2 className="text-4xl lg:text-5xl font-extrabold text-slate-800 mb-6">
-                Hi, I'm Sara Hrnciar 
+                Hi, I &am Sara Hrnciar 
               </h2>
               <p className="text-lg lg:text-xl mb-6">
                 I love computer science. The field is a puzzle begging to be solved.
               </p>
               <p className="text-lg lg:text-xl mb-6">
                 {portfolioType === "academic"
-                  ? "Moreover, I love studying computer science. My research interests include theory of computation as well as human centered computing. I admire that my skills can truly impact people. Through my research in usability testing, personal projects, and experience as a tutor and teacher, I aspire to make as many peoples' lives as easy as possible."
+                  ? "Moreover, I love studying computer science. My research interests include theory of computation as well as human centered computing. I admire that my skills can truly impact people. Through my research in usability testing, personal projects, and experience as a tutor and teacher, I aspire to make as many peoples &a lives as easy as possible."
                   : portfolioType === "professional"
-                  ? "I'm passionate about programming and problem-solving. Over the years, I've built many projects to learn and master various languages and technologies."
+                  ? "I &am passionate about programming and problem-solving. Over the years, I &ave built many projects to learn and master various languages and technologies."
                   : ""}
               </p>
               <a
@@ -174,8 +174,8 @@ useEffect(() => {
           <h2 className="text-3xl font-extrabold mb-4 text-slate-800">Featured Projects</h2>
           <p className="text-lg mb-4 max-w-3xl mx-auto">
             {portfolioType === "academic"
-              ? "Below are some of my personal projects. Feel free to explore the source code and to interact with the deployments themselves if the 'live demo' option is available."
-              : "Below are some of my personal projects. Feel free to explore the source code and to interact with the deployments themselves if the 'live demo' option is available."}
+              ? "Below are some of my personal projects. Feel free to explore the source code and to interact with the deployments themselves if the  &alive demo &a option is available."
+              : "Below are some of my personal projects. Feel free to explore the source code and to interact with the deployments themselves if the  &alive demo &a option is available."}
           </p>
         </div>
 
