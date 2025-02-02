@@ -124,7 +124,7 @@ useEffect(() => {
           {questionStatus == 0 ? (
             <div className="flex-row lg:w-3/4 md:w-3/4 max-w-2xl px-6 lg:px-12 text-left justify-center lg:text-left ">
               <h2 className="text-4xl lg:text-5xl font-extrabold text-slate-800 mb-6">
-                Hi, I &am Sara Hrnciar 
+                Hi, I'm Sara Hrnciar 
               </h2>
               <p className="text-lg lg:text-xl mb-6">
                 I love computer science. The field is a puzzle begging to be solved.
