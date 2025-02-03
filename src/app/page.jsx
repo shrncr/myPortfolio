@@ -126,6 +126,7 @@ useEffect(() => {
               <h2 className="text-4xl lg:text-5xl font-extrabold text-slate-800 mb-6">
                 Hi, I'm <span className="text-pink-600">Sara Hrnciar </span>
               </h2>
+              <p className="text-lg lg:text-xl mb-6">I am currently a student at The University of Tampa, and I will be graduating in the spring with a B.S. in Computer Science and a minor in Mathematics.</p>
               <p className="text-lg lg:text-xl mb-6">
                 {portfolioType === "academic"
                   ? "My research interests include theory of computation as well as human centered computing. I admire that my skills can truly impact the world around me, from academia to humanity! Through my research in usability testing, personal projects, and experience as a tutor and teacher, I aspire to make as many peoples' lives as easy as possible."
