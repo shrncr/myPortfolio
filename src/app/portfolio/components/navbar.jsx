@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-scroll";
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
-
+import PortfolioToggle from "./toggle";
 export default function NavBar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -34,19 +34,25 @@ export default function NavBar() {
           <p className="text-white text-fuchsia-200 font-light italic cursor-pointer">
             Sara Hern-Car
           </p>
+          
           <div
             className="lg:hidden flex items-center"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
-            <button className="text-white text-2xl">
+            <div className="flex-col">
+            <button className="text-white text-2xl ">
               {isMenuOpen ? "✖" : "☰"}
             </button>
+            
+            </div>
+            
           </div>
           <ul
             className={`lg:flex space-x-8 text-white font-semibold ${
               isMenuOpen ? "block" : "hidden"
             } lg:block`}
           >
+            
             <li>
               <Link
                 to="about"
@@ -87,6 +93,7 @@ export default function NavBar() {
                 Awards and Affiliations
               </Link>
             </li>
+            
 
             {/* Social Media Links in Desktop View */}
             <li className="flex space-x-4">
@@ -132,6 +139,7 @@ export default function NavBar() {
           </button>
         </div>
         <ul className="flex flex-col items-center text-white font-semibold space-y-6">
+        <PortfolioToggle/>
           <li>
             <Link
               to="about"
@@ -179,6 +187,7 @@ export default function NavBar() {
           <li className="pt-8">
             Let's Connect!
           </li>
+          
           {/* Social Media Links in Mobile View */}
           <li className="flex space-x-4 mt-6">
             <a

@@ -127,11 +127,8 @@ useEffect(() => {
                 Hi, I'm <span className="text-pink-600">Sara Hrnciar </span>
               </h2>
               <p className="text-lg lg:text-xl mb-6">
-                I love computer science. The field is a puzzle begging to be solved.
-              </p>
-              <p className="text-lg lg:text-xl mb-6">
                 {portfolioType === "academic"
-                  ? "Moreover, I love studying computer science. My research interests include theory of computation as well as human centered computing. I admire that my skills can truly impact the world around me, from academia to humanity! Through my research in usability testing, personal projects, and experience as a tutor and teacher, I aspire to make as many peoples' lives as easy as possible."
+                  ? "My research interests include theory of computation as well as human centered computing. I admire that my skills can truly impact the world around me, from academia to humanity! Through my research in usability testing, personal projects, and experience as a tutor and teacher, I aspire to make as many peoples' lives as easy as possible."
                   : portfolioType === "professional"
                   ? "I have a strong foundation in the core principles of computer science, and I’m confident in my ability to quickly learn new tools when they’re needed. I’m particularly focused on theory, data structures, and algorithms, but I’m also comfortable building interfaces when necessary."
                   : ""}
@@ -159,8 +156,8 @@ useEffect(() => {
           <h2 className="text-3xl font-extrabold mb-4 text-slate-800">Featured Projects</h2>
           <p className="text-lg mb-4 max-w-3xl mx-auto">
             {portfolioType === "academic"
-              ? "Below are some of my personal projects. Feel free to explore the source code and to interact with the deployments themselves if the  live demo option is available. Feel free to check out my GitHub for more projects! :)"
-              : "Below are some of my personal projects. Feel free to explore the source code and to interact with the deployments themselves if the  live demo option is available. Feel free to check out my GitHub for more projects! :)"}
+              ? "Below are some of my personal projects. Feel free to explore the source code and to interact with the deployments themselves if the live demo option is available. Check out my GitHub for more projects! :)"
+              : "Below are some of my personal projects. Feel free to explore the source code and to interact with the deployments themselves if the live demo option is available. Check out my GitHub for more projects! :)"}
           </p>
         </div>
 
@@ -168,8 +165,10 @@ useEffect(() => {
         <ProjectsPage projectType={pType} />
 
         <div>
-          <h1 id="experience" className="text-center text-4xl font-bold mt-10 py-12">My Experience</h1>
-          {/* Pass filtered experiences to the Timeline component */}
+          <h1 id="experience" className="text-center text-4xl font-bold mt-10 py-8">My Experience</h1>
+          <p className="text-center mb-4 ">Reminder that what appears here depends on whether you prefer to explore my academic or professional experience!</p>
+          
+          <PortfolioToggle/>
           <Timeline experiences={filteredExperiences} />
         </div>
         <div id="honors">
