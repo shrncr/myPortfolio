@@ -134,7 +134,9 @@ useEffect(() => {
                   ? "I have a strong foundation in the core principles of computer science, and I’m confident in my ability to quickly learn new tools when they’re needed. I’m particularly focused on theory, data structures, and algorithms, but I’m also comfortable building interfaces when necessary."
                   : "I have a strong foundation in the core principles of computer science, and I’m confident in my ability to quickly learn new tools when they’re needed. I’m particularly focused on theory, data structures, and algorithms, but I’m also comfortable building interfaces when necessary.  I admire that my skills can truly impact the world around me, from academia to humanity! Through my research in usability testing, personal projects, and experience as a tutor and teacher, I aspire to make as many peoples' lives as easy as possible."}
               </p>
-              
+              <a className="text-lg lg:text-xl mb-6 text-purple-900" href="www.linkedin.com/in/sara-hrnciar-681568271" target="_blank">
+              Let’s connect on LinkedIn! Whether you're interested in collaborating on projects or just want to stay in touch, I'd love to hear from you.
+              </a>
             </div>
           ) : (
             <Home state={setQuestionSatus} />
@@ -157,8 +159,8 @@ useEffect(() => {
           <h2 className="text-3xl font-extrabold mb-4 text-slate-800">Featured Projects</h2>
           <p className="text-lg mb-4 max-w-3xl mx-auto">
             {portfolioType === "academic"
-              ? "Below are some of my personal projects. Feel free to explore the source code and to interact with the deployments themselves if the live demo option is available. Check out my GitHub for more projects! :)"
-              : "Below are some of my personal projects. Feel free to explore the source code and to interact with the deployments themselves if the live demo option is available. Check out my GitHub for more projects! :)"}
+              ? <><span>Below are some of my personal projects. Feel free to explore the source code and to interact with the deployments themselves if the live demo option is available. </span> <a href="https://github.com/shrncr" target="_blank" className="text-purple-900"> Check out my GitHub for more projects! </a></>
+              : <><span>Below are some of my personal projects. Feel free to explore the source code and to interact with the deployments themselves if the live demo option is available. </span> <a href="https://github.com/shrncr" target="_blank" className="text-purple-900"> Check out my GitHub for more projects! </a></>}
           </p>
         </div>
 

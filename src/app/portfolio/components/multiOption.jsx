@@ -15,8 +15,12 @@ const Home = (props) => {
   const handleRadioChange = async (value) => {
     setSelectedValue(value);
     setIsCorrect(value === "Hern-Car");
-    await delay(2000)
-    props.state(0)
+    if (isCorrect === true){
+        console.log("Hi")
+        await delay(4000)
+        props.state(0)
+    }
+    
   };
 
   const options = [
@@ -69,7 +73,9 @@ const Home = (props) => {
         >
           <p className="text-xl sm:text-2xl font-semibold">
             <span className="text-gray-700">"Hmmm, Sara </span>
-            <span className="text-red-700 font-bold">{selectedValue}</span>
+            {isCorrect ? <span className="text-green-700 font-bold">{selectedValue}</span>
+            :<span className="text-red-700 font-bold">{selectedValue}</span>}
+            
             <span className="text-gray-700">?"</span>
           </p>
         </motion.div>
