@@ -3,7 +3,7 @@ import { usePortfolio } from '../context/portfolioContext'; // Assuming Portfoli
 import { FaGraduationCap, FaBriefcase } from "react-icons/fa";
 const PortfolioToggle = () => {
   const { portfolioType, setPortfolioType } = usePortfolio();
-
+  console.log("Current Portfolio Type:", portfolioType);
   const handleChange = (event) => {
     setPortfolioType(event.target.id); // Update the context with the selected value
   };
