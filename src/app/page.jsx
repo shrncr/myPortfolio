@@ -131,7 +131,7 @@ useEffect(() => {
                   ? "My research interests include theory of computation as well as human centered computing. I admire that my skills can truly impact the world around me, from academia to humanity! Through my research in usability testing, personal projects, and experience as a tutor and teacher, I aspire to make as many peoples' lives as easy as possible."
                   : portfolioType === "professional"
                   ? "I have a strong foundation in the core principles of computer science, and I’m confident in my ability to quickly learn new tools when they’re needed. I’m particularly focused on theory, data structures, and algorithms, but I’m also comfortable building interfaces when necessary."
-                  : ""}
+                  : "I have a strong foundation in the core principles of computer science, and I’m confident in my ability to quickly learn new tools when they’re needed. I’m particularly focused on theory, data structures, and algorithms, but I’m also comfortable building interfaces when necessary.  I admire that my skills can truly impact the world around me, from academia to humanity! Through my research in usability testing, personal projects, and experience as a tutor and teacher, I aspire to make as many peoples' lives as easy as possible."}
               </p>
               
             </div>

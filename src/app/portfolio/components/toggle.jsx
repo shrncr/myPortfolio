@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { usePortfolio } from '../context/portfolioContext'; // Assuming PortfolioContext is set up
 import { FaGraduationCap, FaBriefcase } from "react-icons/fa";
 const PortfolioToggle = () => {
@@ -7,6 +7,9 @@ const PortfolioToggle = () => {
   const handleChange = (event) => {
     setPortfolioType(event.target.id); // Update the context with the selected value
   };
+  useEffect(()=>{
+console.log("hi")
+  },[portfolioType])
 
   return (
     <div className="flex items-center justify-center">
