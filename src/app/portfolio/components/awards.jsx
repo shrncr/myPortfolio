@@ -44,7 +44,7 @@ const HonorsGrid = () => {
   return (
     <div className="max-w-6xl mx-auto py-12 px-6">
       <h2 className="text-3xl font-bold text-center text-slate-900 mb-6">Honors, Awards, and Affiliations</h2>
-      <p className="text-center text-gray-600 mb-4">Click a card to learn more</p>
+      <p className="text-center text-slate-600 mb-4">Click a card to learn more</p>
       <div className={`${isMobile ? "relative w-full" : "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"} gap-6`}>
         
       {isMobile ? (
@@ -52,7 +52,7 @@ const HonorsGrid = () => {
   {/* Left Arrow */}
   <button
         onClick={prevSlide}
-        className="absolute top-1/2 -left-6 transform -translate-y-1/2 bg-slate-600 p-2 rounded-full shadow-md hover:bg-slate-500"
+        className="absolute top-1/2 -left-6 transform -translate-y-1/2 bg-pink-500 p-2 rounded-full shadow-md hover:bg-pink-400"
         style={{ zIndex: 1 }} // ensures it appears above the cards without overlap
       >
         <ChevronLeft className="text-white w-6 h-6" />
@@ -60,7 +60,7 @@ const HonorsGrid = () => {
       {/* Right Arrow */}
       <button
         onClick={nextSlide}
-        className="absolute top-1/2 -right-6 transform -translate-y-1/2 bg-slate-600 p-2 rounded-full shadow-md hover:bg-slate-500"
+        className="absolute top-1/2 -right-6 transform -translate-y-1/2 bg-pink-500 p-2 rounded-full shadow-md hover:bg-pink-400"
         style={{ zIndex: 1 }} // ensures it appears above the cards without overlap
       >
         <ChevronRight className="text-white w-6 h-6" />

@@ -176,6 +176,9 @@ export default function NavBar() {
               Awards and Affiliations
             </Link>
           </li>
+          <li className="pt-8">
+            Let's Connect!
+          </li>
           {/* Social Media Links in Mobile View */}
           <li className="flex space-x-4 mt-6">
             <a

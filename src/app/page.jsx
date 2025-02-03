@@ -113,45 +113,30 @@ useEffect(() => {
 }, [pType]);
 
   return (
-    <div className="App min-h-screen bg-gradient-to-br from-indigo-50 to-indigo-300 p-8 text-black">
+    <div className="App min-h-screen bg-gradient-to-br from-indigo-50 to-indigo-300 p-4 text-black">
       <NavBar />
       <FilterPopup />
       
       <div className="container mx-auto max-w-7xl">
         {/* Header */}
-        <div id="about" className="flex flex-col lg:flex-row items-center mt-28 lg:items-start gap-3 max-w-6xl mx-auto  mb-16">
+        <div id="about" className="flex flex-col lg:flex-row items-center mt-24 lg:items-start gap-3 max-w-6xl mx-auto  mb-16">
           {/* Left Side: Text */}
           {questionStatus == 0 ? (
             <div className="flex-row lg:w-3/4 md:w-3/4 max-w-2xl px-6 lg:px-12 text-left justify-center lg:text-left ">
               <h2 className="text-4xl lg:text-5xl font-extrabold text-slate-800 mb-6">
-                Hi, I'm Sara Hrnciar 
+                Hi, I'm <span className="text-pink-600">Sara Hrnciar </span>
               </h2>
               <p className="text-lg lg:text-xl mb-6">
                 I love computer science. The field is a puzzle begging to be solved.
               </p>
               <p className="text-lg lg:text-xl mb-6">
                 {portfolioType === "academic"
-                  ? "Moreover, I love studying computer science. My research interests include theory of computation as well as human centered computing. I admire that my skills can truly impact people. Through my research in usability testing, personal projects, and experience as a tutor and teacher, I aspire to make as many peoples &a lives as easy as possible."
+                  ? "Moreover, I love studying computer science. My research interests include theory of computation as well as human centered computing. I admire that my skills can truly impact the world around me, from academia to humanity! Through my research in usability testing, personal projects, and experience as a tutor and teacher, I aspire to make as many peoples' lives as easy as possible."
                   : portfolioType === "professional"
-                  ? "I &am passionate about programming and problem-solving. Over the years, I &ave built many projects to learn and master various languages and technologies."
+                  ? "I have a strong foundation in the core principles of computer science, and I’m confident in my ability to quickly learn new tools when they’re needed. I’m particularly focused on theory, data structures, and algorithms, but I’m also comfortable building interfaces when necessary."
                   : ""}
               </p>
-              <a
-        href="https://www.linkedin.com/in/sara-hrnciar-681568271/"
-        target="_blank"
-        rel="noopener noreferrer"
-        className=" hover:text-blue-700 transition"
-      >
-        <LinkedInIcon fontSize="large" />
-      </a>
-      <a
-        href="https://github.com/shrncr"
-        target="_blank"
-        rel="noopener noreferrer"
-        className=" hover:text-black transition"
-      >
-        <GitHubIcon fontSize="large" />
-      </a>
+              
             </div>
           ) : (
             <Home state={setQuestionSatus} />
@@ -174,8 +159,8 @@ useEffect(() => {
           <h2 className="text-3xl font-extrabold mb-4 text-slate-800">Featured Projects</h2>
           <p className="text-lg mb-4 max-w-3xl mx-auto">
             {portfolioType === "academic"
-              ? "Below are some of my personal projects. Feel free to explore the source code and to interact with the deployments themselves if the  &alive demo &a option is available."
-              : "Below are some of my personal projects. Feel free to explore the source code and to interact with the deployments themselves if the  &alive demo &a option is available."}
+              ? "Below are some of my personal projects. Feel free to explore the source code and to interact with the deployments themselves if the  live demo option is available. Feel free to check out my GitHub for more projects! :)"
+              : "Below are some of my personal projects. Feel free to explore the source code and to interact with the deployments themselves if the  live demo option is available. Feel free to check out my GitHub for more projects! :)"}
           </p>
         </div>
 
