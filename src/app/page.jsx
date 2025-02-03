@@ -134,9 +134,10 @@ useEffect(() => {
                   ? "I have a strong foundation in the core principles of computer science, and I’m confident in my ability to quickly learn new tools when they’re needed. I’m particularly focused on theory, data structures, and algorithms, but I’m also comfortable building interfaces when necessary."
                   : "I have a strong foundation in the core principles of computer science, and I’m confident in my ability to quickly learn new tools when they’re needed. I’m particularly focused on theory, data structures, and algorithms, but I’m also comfortable building interfaces when necessary.  I admire that my skills can truly impact the world around me, from academia to humanity! Through my research in usability testing, personal projects, and experience as a tutor and teacher, I aspire to make as many peoples' lives as easy as possible."}
               </p>
-              <a className="text-lg lg:text-xl mb-6 text-purple-900" href="www.linkedin.com/in/sara-hrnciar-681568271" target="_blank">
-              Let’s connect on LinkedIn! Whether you're interested in collaborating on projects or just want to stay in touch, I'd love to hear from you.
-              </a>
+              <a className="text-lg lg:text-xl mb-6 text-purple-900" href="https://www.linkedin.com/in/sara-hrnciar-681568271" target="_blank" rel="noopener noreferrer">
+  Let’s connect on LinkedIn! Whether you're interested in collaborating on projects or just want to stay in touch, I'd love to hear from you.
+</a>
+
             </div>
           ) : (
             <Home state={setQuestionSatus} />
