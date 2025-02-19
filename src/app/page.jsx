@@ -28,14 +28,6 @@ const PortfolioContent = () => {
     {
       academic: true,
       professional: false,
-      title: "Conference Presentation",
-      company: "Florida Undergraduate Research Conference (FURC)",
-      date: "Feb. 14-15, 2025",
-      description: "Poster Title: Natural Interaction, Real Feedback: A Qualitative Assessment of Minimally Invasive Model for End-User Testing in Recreational Environments"
-    },
-    {
-      academic: true,
-      professional: false,
       title: "Publication",
       company: "The Routledge Handbook of User Experience in Technical Communication",
       date: "Proposal Accepted Nov. 2024, Chapter in Progress",
@@ -51,10 +43,18 @@ const PortfolioContent = () => {
     },
     {
       academic: true,
+      professional: false,
+      title: "Conference Presentation",
+      company: "Florida Undergraduate Research Conference (FURC)",
+      date: "Feb. 14-15, 2025",
+      description: "Poster Title: Natural Interaction, Real Feedback: A Qualitative Assessment of Minimally Invasive Model for End-User Testing in Recreational Environments"
+    },
+    {
+      academic: true,
       professional: true,
       title: "Coding Instructor",
       company: "The Coder School",
-      date: "Sept. 2022 - Present",
+      date: "Sept. 2022 - Geb. 2025",
       description: "Mentoring an average of 10 students ages 8-15 per week in long term projects which utilize technologies such as Java, Javascript, Python, and Lua/Roblox Studio"
     },
     {
