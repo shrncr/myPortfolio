@@ -6,15 +6,12 @@ import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const awards = [
-  { title: "Vice President, Girls Who Code", year: "September 2024-Present", description: "My most significant responsibilities include organizing meeting plans and leading instructional meetings.", icon: GroupIcon },
-  { title: "SURF Grant", year: "2024", description: "Research grant awarded for undergraduate research funding. I personally used this grant to study a new model for end user testing under the mentorship of Dr. Lorraine Jacques.", icon: SchoolIcon },
-  
-  { title: "Deans List", year: "Fall 2023, Spring 2024, Fall 2024", description: "The dean's list is composed of undergraduate students who have achieved a grade point average of 3.75 or better during the semester.", icon: SchoolIcon },
-  { title: "Aves Vocational Scholarship", year: "Awarded May 2022, Recurring", description: "Invitation-only scholarship for students who demonstrate a strong passion in their desired career path (In my case, Computer Science!)", icon: SchoolIcon },
-  { title: "Presidential Merit Scholarship", year: "Awarded May 2022, Recurring", description: "Awarded to high school applicants who attend full time and have an average unweighted 3.8 GPA and 1294 SAT score.", icon: SchoolIcon },
+  { title: "Member, Pi Mu Epsilon", year: "April 2025-Present", description: "PME is  a national mathematics honor society in the United States which promotes scholarly activity in mathmatics.", icon: GroupIcon },
   { title: "Member, IEEE", year: "October 2024-Present", description: "", icon: GroupIcon },
   { title: "IBM Watsonx Technical Sales Intermediate Badge", year: "2024", description: "Earned for proficiency in IBM Watsonx AI sales and solutions.", icon: WorkspacePremiumIcon },
   { title: "IBM Watsonx Sales Foundation Badge", year: "2024", description: "Certification in foundational IBM Watsonx sales skills.", icon: WorkspacePremiumIcon },
+  { title: "SURF Grant", year: "2024", description: "Research grant awarded for undergraduate research funding. I personally used this grant to study a new model for end user testing under the mentorship of Dr. Lorraine Jacques.", icon: SchoolIcon },
+  
 ];
 
 const HonorsGrid = () => {

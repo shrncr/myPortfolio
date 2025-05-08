@@ -17,14 +17,7 @@ const PortfolioContent = () => {
   const [pType, setPType] = useState("all"); 
   const [filteredExperiences, setFilteredExperiences] = useState([]);
   const experiences = [
-    {
-      academic: true,
-      professional: false,
-      title: "Conference Presentation",
-      company: "National Conference on Undergraduate Research (NCUR)",
-      date: "Apr. 7-9, 2025",
-      description: "Poster Title: Natural Interaction, Real Feedback: A Qualitative Assessment of Minimally Invasive Model for End-User Testing in Recreational Environments"
-    },
+    
     {
       academic: true,
       professional: false,
@@ -36,10 +29,26 @@ const PortfolioContent = () => {
     {
       academic: false,
       professional: true,
+      title: "Solutions Architect I, IBM watsonx",
+      company: "TD SYNNEX",
+      date: "May. 2024 - Present",
+      description: "Acting as Subject Matter Expert (SME) for IBM watsonx Orchestrate, data, and ai in cross-functional meetings with clients and business partners. Leading partner enablement sessions, providing hands-on guidance and training to BPs"
+    },
+    {
+      academic: false,
+      professional: true,
       title: "Tech Scholar",
       company: "TD SYNNEX",
-      date: "Sept. 2024 - Present",
+      date: "Sept. 2024 - May 2025",
       description: "Providing presales design consultation to TD SYNNEX partners; Collaborated with IBM team to create interactive AI client demonstration"
+    },
+    {
+      academic: true,
+      professional: false,
+      title: "Conference Presentation",
+      company: "National Conference on Undergraduate Research (NCUR)",
+      date: "Apr. 7-9, 2025",
+      description: "Poster Title: Natural Interaction, Real Feedback: A Qualitative Assessment of Minimally Invasive Model for End-User Testing in Recreational Environments"
     },
     {
       academic: true,
@@ -90,9 +99,6 @@ const PortfolioContent = () => {
       description: "Led peers in lessons for data science libraries: Pandas, Numpy, and Matplotlib. Assisted groups in development of data science projects exploring citywide social patterns "
     }
   ];
-
-  // Filter experiences based on the user &as choice of "academic", "professional", or "both"
-
   const { portfolioType, setPortfolioType } = usePortfolio();
   useEffect(()=>{
     setPType(portfolioType)
@@ -115,7 +121,6 @@ useEffect(() => {
   return (
     <div className="App min-h-screen bg-gradient-to-br from-indigo-50 to-indigo-300 p-4 text-black">
       <NavBar />
-      <FilterPopup />
       
       <div className="container mx-auto max-w-7xl">
         {/* Header */}
@@ -126,7 +131,8 @@ useEffect(() => {
               <h2 className="text-4xl lg:text-5xl font-extrabold text-slate-800 mb-6">
                 Hi, I'm <span className="text-pink-600">Sara Hrnciar </span>
               </h2>
-              <p className="text-lg lg:text-xl mb-6">I am currently a student at The University of Tampa, and I will be graduating in the spring with a B.S. in Computer Science and a minor in Mathematics.</p>
+              <p className="text-lg lg:text-xl mb-6">
+                I have recently graduated magma cumme laude from The Univesity of Tampa with a B.S. in Computer Science and a minor in mathematics.</p>
               <p className="text-lg lg:text-xl mb-6">
                 {portfolioType === "academic"
                   ? "My research interests include theory of computation as well as human centered computing. I admire that my skills can truly impact the world around me, from academia to humanity! Through my research in usability testing, personal projects, and experience as a tutor and teacher, I aspire to make as many peoples' lives as easy as possible."
