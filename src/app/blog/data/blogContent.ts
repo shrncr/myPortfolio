@@ -106,7 +106,7 @@ Bob gave me generic results. My fault—vague input = vague output.
 **Enhanced Output:**
 
 Create a modern, visually appealing UI design for a blog post page displaying technical content about migrating HTML to React using Bob AI. The design should include:
-
+\`\`\`
 1. A clean, contemporary layout with proper typography hierarchy for markdown content including headings (h1-h3), paragraphs, code blocks, and lists
 2. Syntax-highlighted code blocks with a dark theme and proper formatting for file paths, directory structures, and code snippets
 3. Visual distinction for special elements like "Pro Tips", "Important Notes", and "Results" sections using cards or callout boxes
@@ -121,7 +121,7 @@ Create a modern, visually appealing UI design for a blog post page displaying te
 12. A cohesive design system with consistent colors, spacing, and component styles throughout
 
 The UI should feel modern and professional while maintaining excellent readability for technical documentation and code examples.
-
+\`\`\`
 
 **Lesson:** Use the Star icon when you're not sure how to phrase something. It saves time and produces better results.
 
