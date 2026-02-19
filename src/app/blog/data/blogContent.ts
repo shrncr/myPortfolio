@@ -47,12 +47,24 @@ myProject/
 - Propose scalable architecture
 - Surface accessibility issues early
 
-**03-code.md** - Set code standards:
-\`\`\`typescript
-// Example: Always create reusable components
-export const Button = ({ children, onClick, variant = 'primary' }) => {
-  return <button className={'btn btn-' + variant} onClick={onClick}>{children}</button>;
-};
+**03-code.md** - Set code standards. Example snippet from 03-code.md:
+\`\`\`markdown
+### 1. Reusable Components Are Mandatory
+
+- Always abstract reusable UI patterns into their own files.
+- Any UI element that could reasonably be reused must live in a dedicated /components directory.
+- Do NOT inline large UI blocks directly inside pages or feature files.
+- Prefer small, composable components over monolithic files.
+
+Examples of reusable components:
+- Buttons
+- Cards
+- Modals
+- Form fields
+- Layout wrappers
+- Sections
+- Navigation elements
+- Reusable content blocks
 \`\`\`
 
 **Result:** Bob generated consistent, production-ready code from day one. No refactoring needed.
@@ -99,14 +111,14 @@ Bob gave me generic results. My fault—vague input = vague output.
 ![Input before using the Enhance Prompt Feature](/blog/bob-migration/enhance.png)
 
 **Input:** 
-
+\`\`\`bash
 "Modernize the UI"
-
+\`\`\`
 
 **Enhanced Output:**
-
+\`\`\`bash
 Create a modern, visually appealing UI design for a blog post page displaying technical content about migrating HTML to React using Bob AI. The design should include:
-\`\`\`
+
 1. A clean, contemporary layout with proper typography hierarchy for markdown content including headings (h1-h3), paragraphs, code blocks, and lists
 2. Syntax-highlighted code blocks with a dark theme and proper formatting for file paths, directory structures, and code snippets
 3. Visual distinction for special elements like "Pro Tips", "Important Notes", and "Results" sections using cards or callout boxes
