@@ -19,7 +19,7 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
       <div className="min-h-screen bg-gradient-to-br from-primary-50 via-secondary-50 to-primary-100 flex items-center justify-center">
         <div className="text-center animate-fadeIn">
           <h1 className="text-5xl font-bold text-neutral-900 mb-6">Blog Post Not Found</h1>
-          <p className="text-lg text-neutral-600 mb-8">The article you're looking for doesn't exist.</p>
+          <p className="text-lg text-neutral-600 mb-8">The article you&apos;re looking for doesn&apos;t exist.</p>
           <Link
             href="/blog"
             className="inline-flex items-center text-primary-600 hover:text-secondary-600 font-semibold transition-colors duration-fast group focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded-md px-4 py-2"

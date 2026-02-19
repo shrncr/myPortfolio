@@ -124,7 +124,6 @@ export default function NavBar() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-neutral-800 hover:text-primary-900 transition-colors duration-fast p-2 rounded-md hover:bg-neutral-200 focus:outline-none focus:ring-2 focus:ring-primary-500"
-                aria-label="LinkedIn profile"
                 aria-label="GitHub profile"
               >
                 <GitHubIcon fontSize="medium" />

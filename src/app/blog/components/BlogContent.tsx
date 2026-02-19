@@ -1,6 +1,7 @@
 "use client";
 
 import ReactMarkdown from 'react-markdown';
+import NextImage from 'next/image';
 
 interface BlogContentProps {
   content: string;
@@ -73,7 +74,7 @@ export default function BlogContent({ content }: BlogContentProps) {
           ),
           
           // Inline code: Subtle background with accent color
-          code: ({ inline, children }: any) =>
+          code: ({ inline, children }: { inline?: boolean; children?: React.ReactNode }) =>
             inline ? (
               <code className="font-mono bg-neutral-100 text-secondary-600 rounded px-1.5 py-0.5 text-[0.9em] font-medium border border-neutral-200 whitespace-nowrap">
                 {children}
@@ -132,11 +133,13 @@ export default function BlogContent({ content }: BlogContentProps) {
           ),
           
           // Images: Full width with rounded corners
-          img: ({ src, alt }) => (
+          img: ({ src, alt }: { src?: string; alt?: string }) => (
             <figure className="my-10">
-              <img
-                src={src}
+              <NextImage
+                src={src || ''}
                 alt={alt || ''}
+                width={1200}
+                height={675}
                 className="w-full rounded-xl shadow-lg"
               />
               {alt && (
