@@ -1,4 +1,4 @@
-import { blogContent } from './blogContent';
+import { blogContent, orchjiragmail } from './blogContent';
 
 export interface BlogPost {
   id: string;
@@ -24,6 +24,18 @@ export const blogs: BlogPost[] = [
     readTime: '15 min read',
     content: blogContent,
     hasDemo: true,
+    featured: true
+  },
+  {
+    id: 'orch-jira-gmail',
+    title: 'Connecting watsonx Orchestrate to Prebuilt Google and Jira Agents',
+    slug: 'orch-jira-gmail',
+    date: '2026-03-2',
+    excerpt: 'A walkthrough of my experience connecting a watsonx Orchestrate instance to the pre-built Jira and Google tools/agents',
+    tags: ['How-To', 'Orchestrate', 'AI', 'OAuth 2.0'],
+    readTime: '15 min read',
+    content: orchjiragmail,
+    hasDemo: false,
     featured: true
   }
   // Add more blog posts here in the future
