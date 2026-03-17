@@ -1,17 +1,23 @@
-"use client";
-
-import { use } from 'react';
 import Link from 'next/link';
-import { getBlogBySlug } from '../data/blogMetadata';
+import { getBlogBySlug, getAllBlogs } from '../data/blogMetadata';
 import GameDemo from '../components/GameDemo';
 import BlogContent from '../components/BlogContent';
+import ScrollToTopButton from '../components/ScrollToTopButton';
 
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>;
 }
 
-export default function BlogPostPage({ params }: BlogPostPageProps) {
-  const { slug } = use(params);
+// Generate static params for all blog posts
+export async function generateStaticParams() {
+  const blogs = getAllBlogs();
+  return blogs.map((blog) => ({
+    slug: blog.slug,
+  }));
+}
+
+export default async function BlogPostPage({ params }: BlogPostPageProps) {
+  const { slug } = await params;
   const blog = getBlogBySlug(slug);
 
   if (!blog) {
@@ -170,25 +176,7 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
       </footer>
 
       {/* Scroll to Top Button */}
-      <button
-        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-        className="fixed bottom-8 right-8 p-4 bg-primary-600 text-white rounded-full shadow-lg hover:bg-primary-700 hover:scale-110 transition-all duration-fast focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 z-sticky"
-        aria-label="Scroll to top"
-      >
-        <svg
-          className="w-6 h-6"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M5 10l7-7m0 0l7 7m-7-7v18"
-          />
-        </svg>
-      </button>
+      <ScrollToTopButton />
     </div>
   );
 }

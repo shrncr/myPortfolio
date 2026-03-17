@@ -377,16 +377,13 @@ export const widgets = {
       <div id="shor-quantum-out" style="font-size:20px;font-weight:500;color:#1DA075;">—</div>
     </div>
   </div>
-  <div style="position:relative;width:100%;height:280px;">
-    <canvas id="shorChart"></canvas>
-  </div>
+  <svg id="shorChart" width="100%" height="280" style="border:1px solid #e5e5e5;border-radius:8px;background:#fff;"></svg>
   <div id="shor-label" style="margin-top:10px;font-size:13px;color:#888;text-align:center;min-height:18px;"></div>
   <div style="display:flex;gap:20px;margin-top:8px;justify-content:center;font-size:12px;color:#888;">
     <span style="display:flex;align-items:center;gap:4px;"><span style="display:inline-block;width:18px;height:3px;background:#E24B4A;border-radius:2px;"></span>Classical (GNFS)</span>
     <span style="display:flex;align-items:center;gap:4px;"><span style="display:inline-block;width:18px;height:3px;background:#1DA075;border-radius:2px;"></span>Shor's algorithm O(n³)</span>
   </div>
 </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
 (function() {
   function gnfs(n) { return Math.exp(1.9 * Math.pow(n, 1/3) * Math.pow(Math.log(n), 2/3)); }
@@ -399,47 +396,119 @@ export const widgets = {
     if (v >= 1e6) return (v/1e6).toFixed(1) + ' million';
     return Math.round(v).toLocaleString();
   }
-  const nPts = [];
-  for (let n = 8; n <= 2048; n += 16) nPts.push(n);
- 
-  const ctx2 = document.getElementById('shorChart').getContext('2d');
-  const chart = new Chart(ctx2, {
-    type: 'line',
-    data: {
-      labels: nPts,
-      datasets: [
-        { label: 'Classical', data: nPts.map(n => Math.min(Math.log10(Math.max(1, gnfs(n))), 90)), borderColor: '#E24B4A', borderWidth: 2, pointRadius: 0, tension: 0.3, fill: false },
-        { label: "Shor's", data: nPts.map(n => Math.log10(Math.max(1, shor(n)))), borderColor: '#1DA075', borderWidth: 2, pointRadius: 0, tension: 0.3, fill: false }
-      ]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false, animation: false,
-      plugins: { legend: { display: false }, tooltip: { enabled: false } },
-      scales: {
-        x: { title: { display: true, text: 'Key size (bits)', color: '#888', font: { size: 11 } }, ticks: { color: '#888', maxTicksLimit: 8, font: { size: 11 } }, grid: { color: 'rgba(0,0,0,0.06)' } },
-        y: { title: { display: true, text: 'log\u2081\u2080(operations)', color: '#888', font: { size: 11 } }, ticks: { color: '#888', font: { size: 11 }, callback: v => '10' + Math.round(v).toString().split('').map(c=>'\u2070\u00B9\u00B2\u00B3\u2074\u2075\u2076\u2077\u2078\u2079'[+c]??c).join('') }, grid: { color: 'rgba(0,0,0,0.06)' }, min: 0, max: 90 }
-      }
+  
+  const svg = document.getElementById('shorChart');
+  const padding = { top: 30, right: 40, bottom: 40, left: 60 };
+  
+  function drawChart() {
+    const rect = svg.getBoundingClientRect();
+    const width = rect.width;
+    const height = 280;
+    const chartWidth = width - padding.left - padding.right;
+    const chartHeight = height - padding.top - padding.bottom;
+    
+    svg.innerHTML = '';
+    svg.setAttribute('viewBox', '0 0 ' + width + ' ' + height);
+    
+    // Grid and axes
+    const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    g.setAttribute('transform', 'translate(' + padding.left + ',' + padding.top + ')');
+    
+    // Y-axis grid lines and labels
+    for (let i = 0; i <= 9; i++) {
+      const y = chartHeight - (i / 9) * chartHeight;
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', '0');
+      line.setAttribute('y1', y);
+      line.setAttribute('x2', chartWidth);
+      line.setAttribute('y2', y);
+      line.setAttribute('stroke', 'rgba(0,0,0,0.06)');
+      line.setAttribute('stroke-width', '1');
+      g.appendChild(line);
+      
+      const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      text.setAttribute('x', '-8');
+      text.setAttribute('y', y + 4);
+      text.setAttribute('text-anchor', 'end');
+      text.setAttribute('font-size', '11');
+      text.setAttribute('fill', '#888');
+      text.textContent = '10' + (i * 10).toString().split('').map(c => '\u2070\u00B9\u00B2\u00B3\u2074\u2075\u2076\u2077\u2078\u2079'[+c] || c).join('');
+      g.appendChild(text);
     }
-  });
- 
-  const vLine = { id: 'vl', afterDraw(ch) {
+    
+    // X-axis labels
+    for (let i = 0; i <= 8; i++) {
+      const x = (i / 8) * chartWidth;
+      const n = Math.round((i / 8) * 2048);
+      const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      text.setAttribute('x', x);
+      text.setAttribute('y', chartHeight + 20);
+      text.setAttribute('text-anchor', 'middle');
+      text.setAttribute('font-size', '11');
+      text.setAttribute('fill', '#888');
+      text.textContent = n;
+      g.appendChild(text);
+    }
+    
+    // Axis labels
+    const xLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    xLabel.setAttribute('x', chartWidth / 2);
+    xLabel.setAttribute('y', chartHeight + 35);
+    xLabel.setAttribute('text-anchor', 'middle');
+    xLabel.setAttribute('font-size', '11');
+    xLabel.setAttribute('fill', '#888');
+    xLabel.textContent = 'Key size (bits)';
+    g.appendChild(xLabel);
+    
+    const yLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    yLabel.setAttribute('transform', 'translate(-45, ' + (chartHeight/2) + ') rotate(-90)');
+    yLabel.setAttribute('text-anchor', 'middle');
+    yLabel.setAttribute('font-size', '11');
+    yLabel.setAttribute('fill', '#888');
+    yLabel.textContent = 'log₁₀(operations)';
+    g.appendChild(yLabel);
+    
+    // Plot curves
+    const nPts = [];
+    for (let n = 8; n <= 2048; n += 16) nPts.push(n);
+    
+    function plotCurve(data, color) {
+      let path = '';
+      data.forEach((point, i) => {
+        const x = (nPts[i] / 2048) * chartWidth;
+        const y = chartHeight - (Math.min(point, 90) / 90) * chartHeight;
+        path += (i === 0 ? 'M' : 'L') + x + ',' + y;
+      });
+      const pathEl = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      pathEl.setAttribute('d', path);
+      pathEl.setAttribute('fill', 'none');
+      pathEl.setAttribute('stroke', color);
+      pathEl.setAttribute('stroke-width', '2');
+      g.appendChild(pathEl);
+    }
+    
+    const classicalData = nPts.map(n => Math.log10(Math.max(1, gnfs(n))));
+    const shorData = nPts.map(n => Math.log10(Math.max(1, shor(n))));
+    
+    plotCurve(classicalData, '#E24B4A');
+    plotCurve(shorData, '#1DA075');
+    
+    // Current position line
     const n = +document.getElementById('shor-n').value;
-    const xA = ch.scales.x, yA = ch.scales.y;
-    const idx = nPts.findIndex(p => p >= n);
-    if (idx < 0) return;
-    const xPx = xA.getPixelForValue(nPts[idx]);
-    ch.ctx.save();
-    ch.ctx.beginPath();
-    ch.ctx.strokeStyle = 'rgba(0,0,0,0.2)';
-    ch.ctx.lineWidth = 1;
-    ch.ctx.setLineDash([4,3]);
-    ch.ctx.moveTo(xPx, yA.top);
-    ch.ctx.lineTo(xPx, yA.bottom);
-    ch.ctx.stroke();
-    ch.ctx.restore();
-  }};
-  Chart.register(vLine);
- 
+    const x = (n / 2048) * chartWidth;
+    const vline = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    vline.setAttribute('x1', x);
+    vline.setAttribute('y1', '0');
+    vline.setAttribute('x2', x);
+    vline.setAttribute('y2', chartHeight);
+    vline.setAttribute('stroke', 'rgba(0,0,0,0.2)');
+    vline.setAttribute('stroke-width', '1');
+    vline.setAttribute('stroke-dasharray', '4,3');
+    g.appendChild(vline);
+    
+    svg.appendChild(g);
+  }
+  
   function update() {
     const n = +document.getElementById('shor-n').value;
     document.getElementById('shor-n-out').textContent = n + ' bits';
@@ -449,10 +518,11 @@ export const widgets = {
     if (n <= 64) lbl.textContent = 'At small key sizes, the difference is modest.';
     else if (n <= 512) lbl.textContent = 'Classical requires ' + fmtOps(gnfs(n)/shor(n)) + '\xD7 more operations than Shor\u2019s at ' + n + ' bits.';
     else lbl.textContent = 'At ' + n + ' bits (real-world RSA), classical factoring is computationally impossible. Shor\u2019s remains polynomial.';
-    chart.update('none');
+    drawChart();
   }
- 
+  
   document.getElementById('shor-n').addEventListener('input', update);
+  window.addEventListener('resize', drawChart);
   update();
 })();
 </script>`,

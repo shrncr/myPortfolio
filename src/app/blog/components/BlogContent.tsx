@@ -1,7 +1,8 @@
 "use client";
-
+import React from 'react'
 import { useEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
+import type { Components } from 'react-markdown';
 import NextImage from 'next/image';
 import type { ComponentPropsWithoutRef } from 'react'
 
@@ -21,31 +22,38 @@ function WidgetRenderer({ widgetId, html }: { widgetId: string; html: string }) 
     const tempDiv = document.createElement('div');
     tempDiv.innerHTML = html;
     
-    const scripts = tempDiv.querySelectorAll('script');
-    scripts.forEach((oldScript) => {
-      const newScript = document.createElement('script');
-      if (oldScript.src) {
-        newScript.src = oldScript.src;
-      } else {
-        newScript.textContent = oldScript.textContent;
-      }
-      // Remove script from temp div
-      oldScript.remove();
-    });
+    const scripts = Array.from(tempDiv.querySelectorAll('script'));
+    
+    // Remove scripts from temp div
+    scripts.forEach(script => script.remove());
 
     // Set the HTML without scripts first
     if (containerRef.current) {
       containerRef.current.innerHTML = tempDiv.innerHTML;
       
-      // Then append and execute scripts
-      scripts.forEach((oldScript) => {
-        const newScript = document.createElement('script');
-        if (oldScript.src) {
-          newScript.src = oldScript.src;
-        } else {
-          newScript.textContent = oldScript.textContent;
+      // Execute scripts in order, waiting for external scripts to load
+      const executeScripts = async () => {
+        for (const oldScript of scripts) {
+          const newScript = document.createElement('script');
+          
+          if (oldScript.src) {
+            // External script - wait for it to load
+            await new Promise<void>((resolve, reject) => {
+              newScript.src = oldScript.src;
+              newScript.onload = () => resolve();
+              newScript.onerror = () => reject(new Error(`Failed to load script: ${oldScript.src}`));
+              document.head.appendChild(newScript);
+            });
+          } else {
+            // Inline script - execute immediately
+            newScript.textContent = oldScript.textContent;
+            containerRef.current?.appendChild(newScript);
+          }
         }
-        containerRef.current?.appendChild(newScript);
+      };
+      
+      executeScripts().catch(err => {
+        console.error('Error executing widget scripts:', err);
       });
     }
   }, [html]);
@@ -108,8 +116,7 @@ export default function BlogContent({ content, widgets }: BlogContentProps) {
     contentParts.push({ type: 'markdown', content });
   }
 
-
-const markdownComponents = {
+  const markdownComponents: Partial<Components> = {
   h1: ({ children }: ComponentPropsWithoutRef<'h1'>) => (
     <h1 className="font-sans text-5xl font-extrabold text-neutral-900 mt-16 mb-6 leading-tight tracking-tight first:mt-0">
       {children}
@@ -135,28 +142,39 @@ const markdownComponents = {
   ),
     
     // Paragraphs: Generous line height and spacing
-    p: ({ children }: any) => (
-      <p className="text-base text-neutral-700 leading-loose my-6 font-normal">
-        {children}
-      </p>
-    ),
+    p: ({ children, ...props }: ComponentPropsWithoutRef<'p'>) => {
+  const childArray = React.Children.toArray(children);
+  const hasImage = childArray.some(
+    (child) => React.isValidElement(child) && child.type === 'img'
+  );
+
+  if (hasImage) {
+    return <div className="text-base text-neutral-700 leading-loose my-6 font-normal" {...props}>{children}</div>;
+  }
+
+  return (
+    <p className="text-base text-neutral-700 leading-loose my-6 font-normal" {...props}>
+      {children}
+    </p>
+  );
+},
     
     // Unordered lists: Clean bullets with proper spacing
-    ul: ({ children }: any) => (
+    ul: ({ children }: ComponentPropsWithoutRef<'ul'>) => (
       <ul className="my-6 space-y-3 pl-6 font-sans">
         {children}
       </ul>
     ),
     
     // Ordered lists: Clean numbers with proper spacing
-    ol: ({ children }: any) => (
+    ol: ({ children }: ComponentPropsWithoutRef<'ol'>) => (
       <ol className="my-6 space-y-3 pl-6 list-decimal font-sans">
         {children}
       </ol>
     ),
     
     // List items: Comfortable spacing and markers
-    li: ({ children }: any) => (
+    li: ({ children }: ComponentPropsWithoutRef<'li'>) => (
       <li className="text-base text-neutral-700 leading-loose pl-2 marker:text-neutral-400">
         {children}
       </li>
@@ -175,14 +193,14 @@ const markdownComponents = {
       ),
     
     // Code blocks: Dark theme with syntax highlighting feel
-    pre: ({ children }: any) => (
+    pre: ({ children }: ComponentPropsWithoutRef<'pre'>) => (
       <pre className="font-mono bg-neutral-900 text-neutral-100 rounded-xl p-6 overflow-x-auto my-8 shadow-xl border border-neutral-800">
         {children}
       </pre>
     ),
     
     // Blockquotes: Notion-style callout
-    blockquote: ({ children }: any) => (
+    blockquote: ({ children }: ComponentPropsWithoutRef<'blockquote'>) => (
       <blockquote className="border-l-4 border-primary-500 bg-primary-50 pl-6 pr-6 py-5 my-8 rounded-r-lg">
         <div className="text-base text-neutral-700 leading-loose">
           {children}
@@ -191,7 +209,7 @@ const markdownComponents = {
     ),
     
     // Links: Underlined with hover effect
-    a: ({ href, children }: any) => (
+    a: ({ href, children }: ComponentPropsWithoutRef<'a'>) => (
       <a
         href={href}
         className="text-primary-600 hover:text-secondary-600 underline decoration-primary-400 decoration-2 underline-offset-2 transition-all duration-fast hover:decoration-secondary-600 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded-sm"
@@ -203,14 +221,14 @@ const markdownComponents = {
     ),
     
     // Strong: Bold with slightly darker color
-    strong: ({ children }: any) => (
+    strong: ({ children }: ComponentPropsWithoutRef<'td'>) => (
       <strong className="font-bold text-neutral-900">
         {children}
       </strong>
     ),
     
     // Emphasis: Italic
-    em: ({ children }: any) => (
+    em: ({ children }: ComponentPropsWithoutRef<'td'>) => (
       <em className="italic text-neutral-700">
         {children}
       </em>
@@ -240,7 +258,7 @@ const markdownComponents = {
     ),
     
     // Tables: Clean borders and spacing
-    table: ({ children }: any) => (
+    table: ({ children }: ComponentPropsWithoutRef<'table'>) => (
       <div className="my-8 overflow-x-auto font-sans">
         <table className="min-w-full divide-y divide-neutral-200 border border-neutral-200 rounded-lg">
           {children}
@@ -248,31 +266,31 @@ const markdownComponents = {
       </div>
     ),
     
-    thead: ({ children }: any) => (
+    thead: ({ children }: ComponentPropsWithoutRef<'thead'>) => (
       <thead className="bg-neutral-50">
         {children}
       </thead>
     ),
     
-    tbody: ({ children }: any) => (
+    tbody: ({ children }: ComponentPropsWithoutRef<'tbody'>) => (
       <tbody className="bg-white divide-y divide-neutral-200">
         {children}
       </tbody>
     ),
     
-    tr: ({ children }: any) => (
+    tr: ({ children }: ComponentPropsWithoutRef<'tr'>) => (
       <tr className="hover:bg-neutral-50 transition-colors duration-fast">
         {children}
       </tr>
     ),
     
-    th: ({ children }: any) => (
+    th: ({ children }: ComponentPropsWithoutRef<'td'>) => (
       <th className="px-6 py-3 text-left text-xs font-semibold text-neutral-700 uppercase tracking-wider">
         {children}
       </th>
     ),
     
-    td: ({ children }: any) => (
+    td: ({ children }: ComponentPropsWithoutRef<'td'>) => (
       <td className="px-6 py-4 text-sm text-neutral-700">
         {children}
       </td>
