@@ -1,3 +1,689 @@
+//blog post quantum forquantum overview\
+export const quantum = `# The Wrong Question
+ 
+In my last semester of college, I took Theory of Computation, where Dr. Jacques teaches the most horrific conjecture I've encountered in computer science: P vs. NP. Consider:
+
+> If a solution to a problem can be verified quickly, does that mean it can also be found quickly?
+
+If the answer is yes, then P = NP. This conjecture is so significant that it is considered one of the [Millennium Prize Problems](https://www.claymath.org/millennium-problems/p-vs-np-problem). This means that there is a $1,000,000 dollar prize for anyone who can solve P Versus NP. If P=NP, Modern cryptography collapses. Entire classes of optimization problems that currently require exponential time become tractable. Mathematical proofs could be found automatically. The whole architecture of computational difficulty falls apart.
+
+I have been studying computer science since I was 14, and the reason I loved it so much was that everything is debuggable. I spent ages 14 to 20 explaining to anyone who would listen that my fondness for computer science was rooted in the lack of mystery — that every problem has an answer, and that answer is findable with enough patience and the right lines of code.
+
+So when I learned about P versus NP, I learned that my entire intuition about computation might be wrong. Not wrong in a fixable way. Wrong in a way that might be unfixable by design. I spent an entire semester of college absolutely blindsided by it, filling notebooks trying to find a solution that classical computers probably just cannot produce.
+
+Some of the problems I was fixating on already had a different story being written about them, not in theory of computation classrooms, but in physics labs. I didn't find that out in school. I took Theory of Computation in my last semester of college, and after graduating, I transitioned into a full-time role with TD SYNNEX on our IBM team. For those unfamiliar, IBM is a leader in quantum computing, so when I got real exposure to the IBM Quantum platform, that's when it became clear: the problems I'd spent so much mental energy on were open questions in classical complexity theory, and they were also being approached through a completely different computational model that I had never seriously engaged with.
+
+Quantum computing doesn't resolve P versus NP. But it does have a realistic shot within our lifetime and [current roadmaps](https://www.ibm.com/quantum/hardware#roadmap) at solving specific problems that sit at the intersection of classically intractable and quantum approachable. Problems I'd been circling for years without knowing there was another angle entirely.
+
+To clarify, I am not discussing whether quantum will prove or disprove P=NP (it won't). What I am going to talk about is which problems quantum can actually solve, and why. To understand that, you have to start with physics.
+
+---
+ 
+## Quantum Computing Starts With Physics
+
+In the 1980s, [physicist Richard Feynman noticed something inconvenient](https://postquantum.com/quantum-computing/feynman-quantum-history/). If you try to simulate  molecules, particles, materials on a classical computer, the required memory grows exponentially with system size. A modest molecule might require more classical bits than exist in the observable universe. The universe itself, meanwhile, runs quantum systems constantly and without apparent effort.
+ 
+Maybe, the way to simulate a natural phenomena is to build a computer that obeys quantum mechanics. That idea launched an entire field. Three physical phenomena make it work.
+ >  “Nature isn’t classical, dammit, and if you want to make a simulation of nature, you’d better make it quantum mechanical”, Richard Feynman, 1981.
+---
+ 
+## The Three Quantum Effects That Matter
+ 
+### Superposition
+ 
+A classical bit is either 0 or 1. A qubit can exist in a superposition of both simultaneously:
+ 
+>|ψ⟩ = α|0⟩ + β|1⟩
+ 
+where α and β are complex probability amplitudes. The qubit isn't secretly 0 or 1 while you're not looking — it is genuinely in both states at once, until measurement forces it to collapse into one. This is not a metaphor. It is experimentally verified, reproducible physics.
+ 
+A register of n qubits can represent 2ⁿ states simultaneously, which means the number of states grows exponentially with every qubit you add. Sixteen qubits holds 65,536 states at once. Three hundred qubits holds more states than there are atoms in the observable universe. This is the part that gets oversimplified in every quantum explainer you have ever read: people hear "all states at once" and conclude that a quantum computer just tries every possible answer simultaneously and picks the right one. That would be extraordinary. It would also mean measurement is trivial, and it isn't.
+
+When you measure a qubit, the superposition collapses. You get one result. The universe picks for you, probabilistically, and everything else disappears. So the raw fact of superposition doesn't buy you anything on its own.. if you could just look at all the states, you would, and the problem would be solved. The reason quantum computers are interesting is more subtle and more strange than parallelism: it is about what you can do to the state before you measure it. That is where interference comes in, and interference is the actual engine of every quantum algorithm worth knowing about.
+### Entanglement
+ 
+Two qubits can become entangled: their states are correlated in a way that has no classical equivalent. Measure one and the other's state is instantly determined, regardless of physical distance. Einstein famously called this "spooky action at a distance" and found it deeply objectionable. The experimental record has not been kind to his objection. Entanglement is real, and it allows quantum computers to encode relationships between variables in ways classical systems cannot replicate.
+ 
+### Interference
+ 
+This is the actual engine of quantum algorithms, and it receives less attention than it deserves. Quantum states behave like waves, so their amplitudes can actually reinforce or cancel each other out. A well-designed quantum algorithm amplifies the amplitude of correct answers and suppresses incorrect ones through carefully constructed interference patterns. Quantum computation is less about parallelism and more about wave engineering. The distinction matters.
+ 
+::widget:interference-simulator::
+ 
+---
+ 
+## The Complexity Classes That Actually Matter
+ 
+Computer scientists organize problems into complexity classes based on how resource requirements scale with input size. Four classes are worth knowing here.
+ 
+**P** — problems solvable in polynomial time on a classical computer. Sorting, shortest path, multiplication. Efficient by definition.
+ 
+**NP** — problems where a proposed solution can be verified quickly, but finding that solution may require exponential time. Factoring large integers, the traveling salesman problem, graph coloring. The class I spent an embarrassing amount of time trying to crack. There is, incidentally, a $1 million Millennium Prize for anyone who can prove or disprove P = NP — it remains unclaimed.
+ 
+**NP-complete** — the hardest problems in NP. Solve any one in polynomial time and you solve them all. The field's consensus is that P ≠ NP and that this hardness is structural. No clever trick circumvents it. I was resistant to accepting that for longer than I should have been.
+ 
+**BQP** — Bounded-Error Quantum Polynomial time. Problems a quantum computer can solve efficiently with a small probability of error. That error bound is less alarming than it sounds — it can be reduced to any desired threshold by running the algorithm repeatedly and taking a majority vote. BQP sits inside a known hierarchy: P ⊆ BPP ⊆ BQP ⊆ PSPACE. The critical point to highlight  is that BQP is almost certainly not a superset of NP. Quantum computers do not crack NP-complete problems. The hardness there appears to be a deeper fact about computation than quantum mechanics can bypass. But BQP is still genuinely larger than P, and that is where the real story begins.
+ 
+![Venn diagram displaying the relationships of the above complexity classes. Source: https://www.researchgate.net/figure/NP-Complete-problems-are-outside-the-BQP-class-meaning-that-quantum-computers-can-not_fig1_371318355](/blog/quantum/complexity.png)
+ 
+---
+ 
+## Problems Quantum Computers Can Actually Solve
+ 
+Quantum advantage shows up in specific kinds of structure: periodicity, algebraic symmetry, and simulation requirements. The canonical examples follow.
+ 
+### Factoring Large Numbers
+ 
+Shor's algorithm, published in 1994, is the reason every government-funded quantum computing program exists. It factors an n-bit integer in polynomial time (O(n³) quantum) against the classical best of roughly O(e^(n^1/3)), which is effectively exponential for large inputs. RSA encryption derives its security from precisely that classical difficulty.
+ 
+The core insight is that factoring reduces to order-finding: given N and a random integer a, find the smallest r such that aʳ ≡ 1 (mod N). Once you have r, the prime factors of N follow from gcd(aʳ/² ± 1, N) with high probability. Finding r classically requires searching exponentially many values. Shor's algorithm uses the Quantum Fourier Transform, a circuit that exploits interference to find the periodicity of f(x) = aˣ mod N in O(n²) gates, to do it efficiently. The QFT is the engine underneath every quantum speedup involving periodicity or algebraic structure. If large fault-tolerant quantum computers exist, most current public-key cryptography becomes vulnerable.
+ 
+::widget:shor-complexity::
+ 
+### Harvest Now, Decrypt Later
+ 
+That vulnerability is not purely a future concern. There is a strategy nation-state actors are believed to be running right now called harvest now, decrypt later. The approach is straightforward: intercept encrypted data today (e.g. classified communications, medical records, financial transactions, diplomatic cables) and store it. The data is unreadable at time of collection. The bet is that a cryptographically relevant quantum computer will exist within a decade or two, at which point the archive becomes readable retroactively. The breach precedes its own discovery by years.
+ 
+Jeff Crume, IBM Distinguished Engineer and a serious voice in enterprise cybersecurity, has been making this argument consistently for years. His consistent position is that data being exfiltrated today may still carry sensitivity in ten or twenty years, and that the cryptographic migrations required to address this take years to execute. You cannot wait for a cryptographically relevant quantum computer to exist before starting to move. Watch his video on this topic [here](https://www.youtube.com/watch?v=TU9CRyAOekQ).
+ 
+This is why NIST finalized post-quantum cryptography standards in August 2024. Not because quantum computers can break RSA today — they cannot, not at any scale that matters. Because the window in which migration needs to happen is already open, and the data being collected right now is the data at risk.
+ 
+ 
+### Searching Unstructured Data
+ 
+Grover's algorithm, 1996, provides a quadratic speedup for unstructured search: find a marked element among N items in O(√N) quantum queries versus O(N) classically. It works by iteratively applying an oracle that flips the phase of the correct answer, followed by a diffusion operator that amplifies the marked state. Each iteration rotates the quantum state vector slightly toward the target; after O(√N) rotations, you arrive with near-certainty. The geometry of the rotation also proves the bound is optimal, so no quantum algorithm can search unstructured space faster.
+ 
+A quadratic speedup does not break NP-hardness. But it carries real practical consequences: it effectively halves the security strength of symmetric encryption, which is why AES-128 needs to become AES-256 in a post-quantum context.
+ 
+::widget:grover-race::
+ 
+### Simulating Quantum Systems
+ 
+This was Feynman's original motivation, and it may ultimately be the first genuinely transformative industrial application. Classical computers require exponentially growing resources to simulate quantum systems; quantum computers do it natively. The applications span drug discovery, materials science, battery chemistry, and quantum chemistry. Quantum can handle calculations that are classically intractable for large molecules are natural problems for quantum hardware.
+ 
+Quantum Phase Estimation is the core algorithm here. I do not have a deep enough understanding to describe it effectively, so you can read more [here](https://quantum.cloud.ibm.com/learning/en/courses/utility-scale-quantum-computing/quantum-phase-estimation). What I can say this that QPE It is the primitive underlying quantum chemistry, quantum linear systems, and large portions of quantum machine learning.
+
+This milestone is getting closer! in March 2026, IBM published a [reference architecture for quantum-centric supercomputing](https://www.ibm.com/quantum/blog/qcsc-reference-architecture) showing that QPE-based workflows can now be embedded directly into existing HPC infrastructure, with researchers from IBM, RIKEN, and the University of Chicago demonstrating quantum simulation converging to ground-state energies that leading classical methods could not produce, though on synthetic Hamiltonians rather than real-world molecular systems.
+ 
+### A Unifying Structure
+ 
+Most quantum speedups can be understood as instances of the Hidden Subgroup Problem: given a group and a function constant on cosets of some hidden subgroup, find that subgroup. The Quantum Fourier Transform solves abelian instances efficiently. Factoring, discrete logarithm, and many other BQP algorithms are all instances of this structure. When a quantum speedup exists, there is usually periodicity or algebraic symmetry underneath it.
+ 
+---
+ 
+## Where the Hardware Actually Is
+
+The numbers you see in quantum computing headlines are almost always the wrong number.
+
+When IBM announces a 1,000-qubit processor, or Google announces a 70-qubit chip, they are describing physical qubits, which are the actual hardware units. Superconducting circuits, trapped ions, photons. These are noisy by nature. They decohere. They make errors. Two-qubit gate error rates on today's best machines run between 0.1 and 1 percent, which sounds small until you consider that a useful computation might require millions of gates.
+
+The number that actually matters is logical qubits, which are error-corrected qubits built from many physical qubits working together to catch and fix each other's mistakes. The overhead is severe: a single reliable logical qubit requires somewhere between hundreds and thousands of physical qubits depending on the target error rate.
+
+Which means IBM's 1,000-qubit Condor processor is, in error-corrected terms, approximately a one-logical-qubit machine for anything serious.
+
+::widget:qubit-overhead::
+
+Every headline number needs that conversion applied before it means anything.
+
+This is also why Google's 2019 quantum supremacy claim deserves a closer look. A 54-qubit processor completed a specific sampling task in roughly 200 seconds, and Google estimated the same calculation would take a classical supercomputer 10,000 years. The headline wrote itself.
+
+IBM ran the numbers differently. Classical algorithms, properly optimized, could replicate the result in approximately 2.5 days. Both things are true: the demonstration was a genuine engineering achievement, and the 10,000-year figure was not a meaningful measure of anything.
+
+What that exchange exposed is that supremacy was never the right threshold to begin with. The more honest standard is [quantum utility](https://www.ibm.com/quantum/blog/what-is-quantum-utlity): the point where a quantum computer solves a problem that actually matters, faster and more cost-effectively than any classical alternative. Not a contrived sampling task. A real problem, better solved.
+
+That bar has not yet been cleared. The field is building toward it, not past it.
+
+---
+ 
+## What It Looks Like When We Get There
+ 
+Quantum computers will not displace classical computers. No quantum laptops. The realistic near-term picture is quantum processors functioning as specialized co-processors inside hybrid systems which are invoked for the specific sub-problems where quantum algorithms provide genuine advantage, while everything else continues to run on conventional hardware. Access will come through cloud APIs. The transition will look less like a revolution and more like a new category of accelerator becoming available to the problems that can use it.
+ 
+The downstream effects, once meaningful quantum advantage exists, will be significant in specific domains. Cryptography is the most pressing, since RSA and elliptic curve cryptography become vulnerable to Shor's algorithm, post-quantum standards are finalized, and migration is already underway in critical infrastructure. Drug discovery and materials science stand to be substantially affected by quantum simulation of molecular interactions. Optimization problems in logistics and finance may benefit from quantum annealing and variational algorithms, though practical advantage at scale remains undemonstrated. Quantum machine learning carries theoretical speedups for linear algebra and sampling problems, but dequantization results have shown that several of these can be replicated classically with sufficiently clever data structures, so the picture there is genuinely unsettled.
+ 
+The transition will require more than new hardware. Cryptographic infrastructure needs systematic migration. Scientists will need to learn to frame problems as quantum circuits. The entire software stack, from qubit control systems to high-level programming frameworks,is still being built.
+ 
+---
+ 
+## What I Know Now That I Didn't Then
+ 
+If I could go back to the version of myself filling notebooks trying to crack P = NP, I would show her a complexity diagram and point to BQP, since these problems are ones that actually may be solved in my lifetime.
+ 
+P = NP remains one of the deepest open questions in mathematics. Quantum computing does not resolve it. The hardness of NP-complete problems appears to be a more fundamental fact about computation than quantum mechanics can circumvent.
+ 
+But BQP is genuinely larger than P. Integer factorization lives there. Grover's algorithm remains one of the most elegant results I have encountered: pure interference applied to search, provably optimal, requiring almost no assumptions about problem structure. Scroll back up and play with that Grover demo if you haven't already.
+ 
+The thing that took me too long to learn is that the right question was never whether quantum solves the hardest classical problems. The right question is what structure quantum computers exploit that classical computers cannot. The answer is interference, periodicity, and entanglement. The class of problems with that structure is BQP.
+ 
+Everything else follows from there.
+`;
+
+
+export const widgets = {
+ 
+  // ----------------------------------------------------------
+  // Interference simulator
+  // Place after: "...wave engineering. The distinction matters."
+  // ----------------------------------------------------------
+  'interference-simulator': `
+<div class="widget" style="padding:1.5rem 0;">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+    <div>
+      <label style="font-size:13px;color:#888;display:block;margin-bottom:4px;">Wave A amplitude</label>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <input type="range" id="ampA" min="0" max="100" value="80" style="flex:1;">
+        <span id="ampA-out" style="font-size:13px;min-width:30px;text-align:right;color:#888;">80</span>
+      </div>
+    </div>
+    <div>
+      <label style="font-size:13px;color:#888;display:block;margin-bottom:4px;">Wave B amplitude</label>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <input type="range" id="ampB" min="0" max="100" value="80" style="flex:1;">
+        <span id="ampB-out" style="font-size:13px;min-width:30px;text-align:right;color:#888;">80</span>
+      </div>
+    </div>
+  </div>
+  <div style="margin-bottom:16px;">
+    <label style="font-size:13px;color:#888;display:block;margin-bottom:4px;">Phase offset — 0° = constructive &nbsp;|&nbsp; 180° = destructive</label>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <input type="range" id="intf-phase" min="0" max="360" value="0" style="flex:1;">
+      <span id="phase-out" style="font-size:13px;min-width:38px;text-align:right;color:#888;">0°</span>
+    </div>
+  </div>
+  <canvas id="waveCanvas" height="220" style="width:100%;display:block;border-radius:8px;border:1px solid #e5e5e5;"></canvas>
+  <div id="interference-label" style="margin-top:10px;font-size:14px;font-weight:500;text-align:center;min-height:22px;"></div>
+  <p style="font-size:12px;color:#888;margin-top:6px;text-align:center;">This is how quantum algorithms work: engineer the phase so correct answers interfere constructively and wrong answers cancel out.</p>
+</div>
+<script>
+(function() {
+  const canvas = document.getElementById('waveCanvas');
+  const ctx = canvas.getContext('2d');
+ 
+  function resize() {
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = canvas.offsetWidth * dpr;
+    canvas.height = 220 * dpr;
+    ctx.scale(dpr, dpr);
+    draw();
+  }
+ 
+  function getVals() {
+    return {
+      aA: +document.getElementById('ampA').value / 100,
+      aB: +document.getElementById('ampB').value / 100,
+      ph: +document.getElementById('intf-phase').value * Math.PI / 180
+    };
+  }
+ 
+  function draw() {
+    const W = canvas.offsetWidth, H = 220;
+    ctx.clearRect(0, 0, W, H);
+    const { aA, aB, ph } = getVals();
+    const mid = H / 2;
+    const amp = 65;
+    const freq = 2 * Math.PI / W * 3;
+ 
+    ctx.beginPath();
+    ctx.strokeStyle = 'rgba(0,0,0,0.06)';
+    ctx.lineWidth = 0.5;
+    ctx.moveTo(0, mid); ctx.lineTo(W, mid);
+    ctx.stroke();
+ 
+    // Wave A
+    ctx.beginPath();
+    ctx.strokeStyle = '#1DA075';
+    ctx.lineWidth = 1.5;
+    ctx.globalAlpha = 0.45;
+    for (let x = 0; x <= W; x++) {
+      const y = mid - aA * amp * Math.sin(freq * x);
+      x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+ 
+    // Wave B
+    ctx.beginPath();
+    ctx.strokeStyle = '#7F77DD';
+    ctx.lineWidth = 1.5;
+    ctx.globalAlpha = 0.45;
+    for (let x = 0; x <= W; x++) {
+      const y = mid - aB * amp * Math.sin(freq * x + ph);
+      x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+ 
+    // Result
+    const phDeg = +document.getElementById('intf-phase').value;
+    const isC = phDeg < 30 || phDeg > 330;
+    const isD = phDeg > 150 && phDeg < 210;
+    ctx.beginPath();
+    ctx.globalAlpha = 1;
+    ctx.strokeStyle = isC ? '#BA7517' : isD ? '#A32D2D' : '#185FA5';
+    ctx.lineWidth = 2.5;
+    for (let x = 0; x <= W; x++) {
+      const y = mid - (aA * amp * Math.sin(freq * x) + aB * amp * Math.sin(freq * x + ph));
+      x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+ 
+    // Key
+    ctx.globalAlpha = 0.7;
+    ctx.font = '11px sans-serif';
+    ctx.fillStyle = '#1DA075'; ctx.fillText('Wave A', 8, 18);
+    ctx.fillStyle = '#7F77DD'; ctx.fillText('Wave B', 8, 32);
+    ctx.fillStyle = isC ? '#BA7517' : isD ? '#A32D2D' : '#185FA5';
+    ctx.fillText('Result', 8, 46);
+    ctx.globalAlpha = 1;
+ 
+    const label = document.getElementById('interference-label');
+    if (isC) {
+      label.style.color = '#BA7517';
+      label.textContent = 'Constructive interference — amplitudes add. Correct answers amplified.';
+    } else if (isD) {
+      label.style.color = '#A32D2D';
+      label.textContent = 'Destructive interference — amplitudes cancel. Wrong answers suppressed.';
+    } else {
+      label.style.color = '#888';
+      label.textContent = 'Partial interference — somewhere between.';
+    }
+  }
+ 
+  ['ampA','ampB','intf-phase'].forEach(id => {
+    const el = document.getElementById(id);
+    const outId = id === 'intf-phase' ? 'phase-out' : id + '-out';
+    el.addEventListener('input', () => {
+      document.getElementById(outId).textContent = id === 'intf-phase' ? el.value + '°' : el.value;
+      draw();
+    });
+  });
+ 
+  new ResizeObserver(resize).observe(canvas);
+  resize();
+})();
+</script>`,
+ 
+ 
+  // ----------------------------------------------------------
+  // Complexity hierarchy diagram
+  // Place after: "...that is where the real story begins."
+  // ----------------------------------------------------------
+  'complexity-hierarchy': `
+<div class="widget" style="padding:1.5rem 0;">
+  <svg width="100%" viewBox="0 0 680 420" xmlns="http://www.w3.org/2000/svg" style="font-family:sans-serif;">
+    <defs>
+      <marker id="ch-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M2 1L8 5L2 9" fill="none" stroke="#888" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </marker>
+    </defs>
+    <!-- PSPACE -->
+    <rect x="30" y="20" width="480" height="370" rx="16" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+    <text x="54" y="48" font-size="14" font-weight="500" fill="#2C2C2A">PSPACE</text>
+    <text x="54" y="64" font-size="12" fill="#5F5E5A">All problems solvable with polynomial memory</text>
+    <!-- BQP -->
+    <rect x="60" y="80" width="390" height="280" rx="14" fill="#EEEDFE" stroke="#7F77DD" stroke-width="0.5"/>
+    <text x="84" y="108" font-size="14" font-weight="500" fill="#26215C">BQP</text>
+    <text x="84" y="124" font-size="12" fill="#534AB7">Quantum polynomial time</text>
+    <!-- BPP -->
+    <rect x="90" y="140" width="300" height="190" rx="12" fill="#E1F5EE" stroke="#1D9E75" stroke-width="0.5"/>
+    <text x="114" y="167" font-size="14" font-weight="500" fill="#04342C">BPP</text>
+    <text x="114" y="183" font-size="12" fill="#0F6E56">Classical probabilistic polynomial time</text>
+    <!-- P -->
+    <rect x="118" y="200" width="210" height="100" rx="10" fill="#E6F1FB" stroke="#378ADD" stroke-width="0.5"/>
+    <text x="223" y="244" font-size="14" font-weight="500" fill="#042C53" text-anchor="middle">P</text>
+    <text x="223" y="262" font-size="12" fill="#185FA5" text-anchor="middle">Deterministic polynomial time</text>
+    <text x="223" y="278" font-size="12" fill="#185FA5" text-anchor="middle">Sorting, shortest path, multiply</text>
+    <!-- NP -->
+    <rect x="380" y="80" width="250" height="280" rx="14" fill="#FAECE7" stroke="#D85A30" stroke-width="0.5" opacity="0.9"/>
+    <text x="404" y="108" font-size="14" font-weight="500" fill="#4A1B0C">NP</text>
+    <text x="404" y="124" font-size="12" fill="#993C1D">Verify quickly, find slowly</text>
+    <text x="404" y="144" font-size="12" fill="#993C1D">Factoring, TSP, 3-SAT</text>
+    <!-- NP-complete box -->
+    <rect x="398" y="200" width="210" height="60" rx="8" fill="none" stroke="#D85A30" stroke-width="0.5"/>
+    <text x="503" y="226" font-size="12" fill="#993C1D" text-anchor="middle">NP-complete</text>
+    <text x="503" y="244" font-size="12" fill="#993C1D" text-anchor="middle">Hardest problems in NP</text>
+    <!-- Factoring badge (BQP ∩ NP) -->
+    <rect x="370" y="155" width="120" height="36" rx="8" fill="#FAEEDA" stroke="#BA7517" stroke-width="0.5"/>
+    <text x="430" y="177" font-size="13" font-weight="500" fill="#633806" text-anchor="middle">Factoring</text>
+    <!-- Open question -->
+    <line x1="490" y1="220" x2="544" y2="220" stroke="#888" stroke-width="0.5" stroke-dasharray="4 3" marker-end="url(#ch-arrow)"/>
+    <text x="548" y="213" font-size="12" fill="#5F5E5A">?</text>
+    <text x="548" y="227" font-size="12" fill="#5F5E5A">BQP ⊆ NP?</text>
+    <text x="548" y="241" font-size="12" fill="#5F5E5A">Unknown</text>
+    <!-- Hierarchy label -->
+    <text x="340" y="398" font-size="12" fill="#888" text-anchor="middle">P ⊆ BPP ⊆ BQP ⊆ PSPACE</text>
+  </svg>
+</div>`,
+ 
+ 
+  // ----------------------------------------------------------
+  // Shor's algorithm complexity curves
+  // Place after: "...most current public-key cryptography becomes vulnerable."
+  // ----------------------------------------------------------
+  'shor-complexity': `
+<div class="widget" style="padding:1.5rem 0;">
+  <div style="margin-bottom:16px;">
+    <label style="font-size:13px;color:#888;display:block;margin-bottom:4px;">Key size n (bits) — drag to see how the gap grows</label>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <input type="range" id="shor-n" min="8" max="2048" step="8" value="128" style="flex:1;">
+      <span id="shor-n-out" style="font-size:13px;min-width:60px;text-align:right;color:#888;">128 bits</span>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+    <div style="background:#f7f7f5;border-radius:8px;padding:12px;">
+      <div style="font-size:12px;color:#888;margin-bottom:4px;">Classical ops (GNFS)</div>
+      <div id="shor-classical-out" style="font-size:20px;font-weight:500;color:#222;">—</div>
+    </div>
+    <div style="background:#f7f7f5;border-radius:8px;padding:12px;">
+      <div style="font-size:12px;color:#888;margin-bottom:4px;">Shor's algorithm ops</div>
+      <div id="shor-quantum-out" style="font-size:20px;font-weight:500;color:#1DA075;">—</div>
+    </div>
+  </div>
+  <div style="position:relative;width:100%;height:280px;">
+    <canvas id="shorChart"></canvas>
+  </div>
+  <div id="shor-label" style="margin-top:10px;font-size:13px;color:#888;text-align:center;min-height:18px;"></div>
+  <div style="display:flex;gap:20px;margin-top:8px;justify-content:center;font-size:12px;color:#888;">
+    <span style="display:flex;align-items:center;gap:4px;"><span style="display:inline-block;width:18px;height:3px;background:#E24B4A;border-radius:2px;"></span>Classical (GNFS)</span>
+    <span style="display:flex;align-items:center;gap:4px;"><span style="display:inline-block;width:18px;height:3px;background:#1DA075;border-radius:2px;"></span>Shor's algorithm O(n³)</span>
+  </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+(function() {
+  function gnfs(n) { return Math.exp(1.9 * Math.pow(n, 1/3) * Math.pow(Math.log(n), 2/3)); }
+  function shor(n) { return Math.pow(n, 3); }
+  function fmtOps(v) {
+    if (!isFinite(v) || v > 1e80) return '> 10\u2078\u2070';
+    const e = Math.round(Math.log10(v));
+    if (v >= 1e15) return '~10' + String(e).split('').map(c => '\u2070\u00B9\u00B2\u00B3\u2074\u2075\u2076\u2077\u2078\u2079'[+c]).join('');
+    if (v >= 1e9) return (v/1e9).toFixed(1) + ' billion';
+    if (v >= 1e6) return (v/1e6).toFixed(1) + ' million';
+    return Math.round(v).toLocaleString();
+  }
+  const nPts = [];
+  for (let n = 8; n <= 2048; n += 16) nPts.push(n);
+ 
+  const ctx2 = document.getElementById('shorChart').getContext('2d');
+  const chart = new Chart(ctx2, {
+    type: 'line',
+    data: {
+      labels: nPts,
+      datasets: [
+        { label: 'Classical', data: nPts.map(n => Math.min(Math.log10(Math.max(1, gnfs(n))), 90)), borderColor: '#E24B4A', borderWidth: 2, pointRadius: 0, tension: 0.3, fill: false },
+        { label: "Shor's", data: nPts.map(n => Math.log10(Math.max(1, shor(n)))), borderColor: '#1DA075', borderWidth: 2, pointRadius: 0, tension: 0.3, fill: false }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, animation: false,
+      plugins: { legend: { display: false }, tooltip: { enabled: false } },
+      scales: {
+        x: { title: { display: true, text: 'Key size (bits)', color: '#888', font: { size: 11 } }, ticks: { color: '#888', maxTicksLimit: 8, font: { size: 11 } }, grid: { color: 'rgba(0,0,0,0.06)' } },
+        y: { title: { display: true, text: 'log\u2081\u2080(operations)', color: '#888', font: { size: 11 } }, ticks: { color: '#888', font: { size: 11 }, callback: v => '10' + Math.round(v).toString().split('').map(c=>'\u2070\u00B9\u00B2\u00B3\u2074\u2075\u2076\u2077\u2078\u2079'[+c]??c).join('') }, grid: { color: 'rgba(0,0,0,0.06)' }, min: 0, max: 90 }
+      }
+    }
+  });
+ 
+  const vLine = { id: 'vl', afterDraw(ch) {
+    const n = +document.getElementById('shor-n').value;
+    const xA = ch.scales.x, yA = ch.scales.y;
+    const idx = nPts.findIndex(p => p >= n);
+    if (idx < 0) return;
+    const xPx = xA.getPixelForValue(nPts[idx]);
+    ch.ctx.save();
+    ch.ctx.beginPath();
+    ch.ctx.strokeStyle = 'rgba(0,0,0,0.2)';
+    ch.ctx.lineWidth = 1;
+    ch.ctx.setLineDash([4,3]);
+    ch.ctx.moveTo(xPx, yA.top);
+    ch.ctx.lineTo(xPx, yA.bottom);
+    ch.ctx.stroke();
+    ch.ctx.restore();
+  }};
+  Chart.register(vLine);
+ 
+  function update() {
+    const n = +document.getElementById('shor-n').value;
+    document.getElementById('shor-n-out').textContent = n + ' bits';
+    document.getElementById('shor-classical-out').textContent = fmtOps(gnfs(n));
+    document.getElementById('shor-quantum-out').textContent = fmtOps(shor(n));
+    const lbl = document.getElementById('shor-label');
+    if (n <= 64) lbl.textContent = 'At small key sizes, the difference is modest.';
+    else if (n <= 512) lbl.textContent = 'Classical requires ' + fmtOps(gnfs(n)/shor(n)) + '\xD7 more operations than Shor\u2019s at ' + n + ' bits.';
+    else lbl.textContent = 'At ' + n + ' bits (real-world RSA), classical factoring is computationally impossible. Shor\u2019s remains polynomial.';
+    chart.update('none');
+  }
+ 
+  document.getElementById('shor-n').addEventListener('input', update);
+  update();
+})();
+</script>`,
+ 
+ 
+  // ----------------------------------------------------------
+  // HNDL timeline
+  // Place after: "...the data being collected right now is the data at risk."
+  // ----------------------------------------------------------
+  'hndl-timeline': `
+<div class="widget" style="padding:1.5rem 0;">
+  <svg width="100%" viewBox="0 0 680 230" xmlns="http://www.w3.org/2000/svg" style="font-family:sans-serif;">
+    <defs>
+      <marker id="tl-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M2 1L8 5L2 9" fill="none" stroke="#888" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </marker>
+    </defs>
+    <!-- Spine -->
+    <line x1="60" y1="112" x2="630" y2="112" stroke="#ccc" stroke-width="1" marker-end="url(#tl-arrow)"/>
+    <!-- Harvest zone -->
+    <rect x="60" y="92" width="280" height="40" rx="4" fill="#FCEBEB" stroke="#E24B4A" stroke-width="0.5"/>
+    <text x="200" y="108" font-size="12" fill="#A32D2D" text-anchor="middle">Data harvested now</text>
+    <text x="200" y="124" font-size="12" fill="#A32D2D" text-anchor="middle">Unreadable at collection</text>
+    <!-- CRQC window -->
+    <rect x="360" y="92" width="180" height="40" rx="4" fill="#FAEEDA" stroke="#BA7517" stroke-width="0.5"/>
+    <text x="450" y="108" font-size="12" fill="#633806" text-anchor="middle">CRQC arrives</text>
+    <text x="450" y="124" font-size="12" fill="#633806" text-anchor="middle">~10–20 years</text>
+    <!-- Retroactive decrypt arc -->
+    <path d="M450 92 Q450 50 200 50" fill="none" stroke="#E24B4A" stroke-width="1" stroke-dasharray="5 3" marker-end="url(#tl-arrow)"/>
+    <text x="340" y="44" font-size="12" fill="#A32D2D" text-anchor="middle">Retroactive decryption</text>
+    <!-- Year ticks -->
+    <line x1="60"  y1="106" x2="60"  y2="118" stroke="#aaa" stroke-width="1"/>
+    <text x="60"  y="134" font-size="11" fill="#888" text-anchor="middle">2025</text>
+    <line x1="200" y1="106" x2="200" y2="118" stroke="#aaa" stroke-width="1"/>
+    <text x="200" y="134" font-size="11" fill="#888" text-anchor="middle">2030</text>
+    <line x1="340" y1="106" x2="340" y2="118" stroke="#aaa" stroke-width="1"/>
+    <text x="340" y="134" font-size="11" fill="#888" text-anchor="middle">2035</text>
+    <line x1="480" y1="106" x2="480" y2="118" stroke="#aaa" stroke-width="1"/>
+    <text x="480" y="134" font-size="11" fill="#888" text-anchor="middle">2040</text>
+    <!-- NIST callout -->
+    <circle cx="100" cy="112" r="3" fill="#1DA075"/>
+    <line x1="100" y1="115" x2="100" y2="160" stroke="#aaa" stroke-width="0.5" stroke-dasharray="3 2"/>
+    <rect x="30" y="160" width="200" height="40" rx="6" fill="#E1F5EE" stroke="#1D9E75" stroke-width="0.5"/>
+    <text x="130" y="176" font-size="12" font-weight="500" fill="#04342C" text-anchor="middle">NIST PQC standards</text>
+    <text x="130" y="192" font-size="11" fill="#0F6E56" text-anchor="middle">Finalized Aug 2024 — migrate now</text>
+    <!-- Sensitive data callout -->
+    <circle cx="200" cy="112" r="3" fill="#E24B4A"/>
+    <line x1="200" y1="115" x2="290" y2="160" stroke="#aaa" stroke-width="0.5" stroke-dasharray="3 2"/>
+    <rect x="252" y="160" width="220" height="40" rx="6" fill="#FCEBEB" stroke="#E24B4A" stroke-width="0.5"/>
+    <text x="362" y="176" font-size="12" font-weight="500" fill="#501313" text-anchor="middle">Data stolen today</text>
+    <text x="362" y="192" font-size="11" fill="#A32D2D" text-anchor="middle">May still be sensitive when decrypted</text>
+  </svg>
+</div>`,
+ 
+ 
+  // ----------------------------------------------------------
+  // Grover's search race
+  // Place after: "...AES-128 needs to become AES-256 in a post-quantum context."
+  // ----------------------------------------------------------
+  'grover-race': `
+<div class="widget" style="padding:1.5rem 0;">
+  <div style="margin-bottom:16px;">
+    <label style="font-size:13px;color:#888;display:block;margin-bottom:4px;">Database size N</label>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <input type="range" id="gr-n" min="4" max="10000" step="4" value="100" style="flex:1;">
+      <span id="gr-n-out" style="font-size:13px;min-width:72px;text-align:right;color:#888;">100 items</span>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+    <div style="background:#f7f7f5;border-radius:8px;padding:12px;">
+      <div style="font-size:12px;color:#888;margin-bottom:4px;">Classical — O(N)</div>
+      <div id="gr-c-steps" style="font-size:22px;font-weight:500;color:#222;">100 steps</div>
+    </div>
+    <div style="background:#f7f7f5;border-radius:8px;padding:12px;">
+      <div style="font-size:12px;color:#888;margin-bottom:4px;">Grover's — O(√N)</div>
+      <div id="gr-q-steps" style="font-size:22px;font-weight:500;color:#1DA075;">10 steps</div>
+    </div>
+  </div>
+  <div style="margin-bottom:8px;">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+      <span style="font-size:12px;color:#888;width:90px;flex-shrink:0;">Classical</span>
+      <div style="flex:1;background:#f0f0ee;border-radius:4px;height:28px;overflow:hidden;">
+        <div id="gr-c-bar" style="height:100%;background:#E24B4A;width:0%;border-radius:4px;transition:width 0.03s;"></div>
+      </div>
+      <span id="gr-c-pct" style="font-size:12px;color:#888;width:36px;text-align:right;">0%</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="font-size:12px;color:#888;width:90px;flex-shrink:0;">Grover's</span>
+      <div style="flex:1;background:#f0f0ee;border-radius:4px;height:28px;overflow:hidden;">
+        <div id="gr-q-bar" style="height:100%;background:#1DA075;width:0%;border-radius:4px;transition:width 0.03s;"></div>
+      </div>
+      <span id="gr-q-pct" style="font-size:12px;color:#888;width:36px;text-align:right;">0%</span>
+    </div>
+  </div>
+  <div style="display:flex;gap:8px;margin-top:12px;">
+    <button id="gr-run" onclick="groverRun()" style="flex:1;padding:8px;border:1px solid #ddd;border-radius:6px;background:#fff;cursor:pointer;font-size:13px;">Run race</button>
+    <button id="gr-reset" onclick="groverReset()" style="flex:1;padding:8px;border:1px solid #ddd;border-radius:6px;background:#fff;cursor:pointer;font-size:13px;">Reset</button>
+  </div>
+  <div id="gr-result" style="margin-top:10px;font-size:14px;font-weight:500;text-align:center;min-height:22px;color:#222;"></div>
+</div>
+<script>
+var grRunning = false, grRaf = null, grElapsed = 0, grLast = null, grCdone = false, grQdone = false;
+var GR_STEP_MS = 16;
+ 
+function grGetN() { return +document.getElementById('gr-n').value; }
+function grGetSqN() { return Math.ceil(Math.sqrt(grGetN())); }
+ 
+function grUpdateLabels() {
+  var N = grGetN(), sqN = grGetSqN();
+  document.getElementById('gr-n-out').textContent = N.toLocaleString() + ' items';
+  document.getElementById('gr-c-steps').textContent = N.toLocaleString() + ' steps';
+  document.getElementById('gr-q-steps').textContent = sqN.toLocaleString() + ' steps';
+}
+ 
+document.getElementById('gr-n').addEventListener('input', function() { groverReset(); grUpdateLabels(); });
+ 
+function grFrame(ts) {
+  if (!grLast) grLast = ts;
+  grElapsed += ts - grLast;
+  grLast = ts;
+  var N = grGetN(), sqN = grGetSqN();
+  var steps = Math.floor(grElapsed / GR_STEP_MS);
+  if (!grQdone) {
+    var qp = Math.min(Math.round(steps / sqN * 100), 100);
+    document.getElementById('gr-q-bar').style.width = qp + '%';
+    document.getElementById('gr-q-pct').textContent = qp + '%';
+    if (steps >= sqN) {
+      grQdone = true;
+      var cpct = Math.min(Math.round(steps / N * 100), 100);
+      document.getElementById('gr-result').textContent = "Grover's finished. Classical is " + cpct + "% done.";
+    }
+  }
+  if (!grCdone) {
+    var cp = Math.min(Math.round(steps / N * 100), 100);
+    document.getElementById('gr-c-bar').style.width = cp + '%';
+    document.getElementById('gr-c-pct').textContent = cp + '%';
+    if (steps >= N) grCdone = true;
+  }
+  if (grCdone && grQdone) {
+    document.getElementById('gr-result').textContent = 'Both done. Grover\u2019s needed ' + sqN.toLocaleString() + ' steps vs ' + N.toLocaleString() + ' classical \u2014 ' + Math.round(N/sqN) + '\xD7 faster.';
+    grRunning = false; return;
+  }
+  grRaf = requestAnimationFrame(grFrame);
+}
+ 
+function groverRun() {
+  if (grRunning) return;
+  groverReset();
+  grRunning = true; grElapsed = 0; grLast = null; grCdone = false; grQdone = false;
+  document.getElementById('gr-result').textContent = '';
+  grRaf = requestAnimationFrame(grFrame);
+}
+ 
+function groverReset() {
+  if (grRaf) cancelAnimationFrame(grRaf);
+  grRunning = false; grCdone = false; grQdone = false; grElapsed = 0; grLast = null;
+  ['gr-c-bar','gr-q-bar'].forEach(function(id){ document.getElementById(id).style.width='0%'; });
+  ['gr-c-pct','gr-q-pct'].forEach(function(id){ document.getElementById(id).textContent='0%'; });
+  document.getElementById('gr-result').textContent = '';
+}
+ 
+grUpdateLabels();
+</script>`,
+ 
+ 
+  // ----------------------------------------------------------
+  // Physical vs logical qubit overhead
+  // Place after: "...does not translate to useful computation in any direct way."
+  // ----------------------------------------------------------
+  'qubit-overhead': `
+<div class="widget" style="padding:1.5rem 0;">
+  <svg width="100%" viewBox="0 0 680 260" xmlns="http://www.w3.org/2000/svg" style="font-family:sans-serif;">
+    <defs>
+      <marker id="qo-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M2 1L8 5L2 9" fill="none" stroke="#888" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </marker>
+    </defs>
+    <!-- Left label -->
+    <text x="130" y="22" font-size="13" font-weight="500" fill="#222" text-anchor="middle">IBM Condor: 1,000+ physical qubits</text>
+    <!-- Physical qubit dots grid 25×8 = 200 representative dots -->
+    <g fill="#B4B2A9" opacity="0.75">
+      <!-- 8 rows × 25 cols, each dot 7×7, gap 3, start x=18 y=32 -->
+      <!-- Row 1 --><rect x="18" y="32" width="7" height="7" rx="1"/><rect x="28" y="32" width="7" height="7" rx="1"/><rect x="38" y="32" width="7" height="7" rx="1"/><rect x="48" y="32" width="7" height="7" rx="1"/><rect x="58" y="32" width="7" height="7" rx="1"/><rect x="68" y="32" width="7" height="7" rx="1"/><rect x="78" y="32" width="7" height="7" rx="1"/><rect x="88" y="32" width="7" height="7" rx="1"/><rect x="98" y="32" width="7" height="7" rx="1"/><rect x="108" y="32" width="7" height="7" rx="1"/><rect x="118" y="32" width="7" height="7" rx="1"/><rect x="128" y="32" width="7" height="7" rx="1"/><rect x="138" y="32" width="7" height="7" rx="1"/><rect x="148" y="32" width="7" height="7" rx="1"/><rect x="158" y="32" width="7" height="7" rx="1"/><rect x="168" y="32" width="7" height="7" rx="1"/><rect x="178" y="32" width="7" height="7" rx="1"/><rect x="188" y="32" width="7" height="7" rx="1"/><rect x="198" y="32" width="7" height="7" rx="1"/><rect x="208" y="32" width="7" height="7" rx="1"/><rect x="218" y="32" width="7" height="7" rx="1"/><rect x="228" y="32" width="7" height="7" rx="1"/><rect x="238" y="32" width="7" height="7" rx="1"/><rect x="248" y="32" width="7" height="7" rx="1"/><rect x="258" y="32" width="7" height="7" rx="1"/>
+      <!-- Row 2 --><rect x="18" y="42" width="7" height="7" rx="1"/><rect x="28" y="42" width="7" height="7" rx="1"/><rect x="38" y="42" width="7" height="7" rx="1"/><rect x="48" y="42" width="7" height="7" rx="1"/><rect x="58" y="42" width="7" height="7" rx="1"/><rect x="68" y="42" width="7" height="7" rx="1"/><rect x="78" y="42" width="7" height="7" rx="1"/><rect x="88" y="42" width="7" height="7" rx="1"/><rect x="98" y="42" width="7" height="7" rx="1"/><rect x="108" y="42" width="7" height="7" rx="1"/><rect x="118" y="42" width="7" height="7" rx="1"/><rect x="128" y="42" width="7" height="7" rx="1"/><rect x="138" y="42" width="7" height="7" rx="1"/><rect x="148" y="42" width="7" height="7" rx="1"/><rect x="158" y="42" width="7" height="7" rx="1"/><rect x="168" y="42" width="7" height="7" rx="1"/><rect x="178" y="42" width="7" height="7" rx="1"/><rect x="188" y="42" width="7" height="7" rx="1"/><rect x="198" y="42" width="7" height="7" rx="1"/><rect x="208" y="42" width="7" height="7" rx="1"/><rect x="218" y="42" width="7" height="7" rx="1"/><rect x="228" y="42" width="7" height="7" rx="1"/><rect x="238" y="42" width="7" height="7" rx="1"/><rect x="248" y="42" width="7" height="7" rx="1"/><rect x="258" y="42" width="7" height="7" rx="1"/>
+      <!-- Row 3 --><rect x="18" y="52" width="7" height="7" rx="1"/><rect x="28" y="52" width="7" height="7" rx="1"/><rect x="38" y="52" width="7" height="7" rx="1"/><rect x="48" y="52" width="7" height="7" rx="1"/><rect x="58" y="52" width="7" height="7" rx="1"/><rect x="68" y="52" width="7" height="7" rx="1"/><rect x="78" y="52" width="7" height="7" rx="1"/><rect x="88" y="52" width="7" height="7" rx="1"/><rect x="98" y="52" width="7" height="7" rx="1"/><rect x="108" y="52" width="7" height="7" rx="1"/><rect x="118" y="52" width="7" height="7" rx="1"/><rect x="128" y="52" width="7" height="7" rx="1"/><rect x="138" y="52" width="7" height="7" rx="1"/><rect x="148" y="52" width="7" height="7" rx="1"/><rect x="158" y="52" width="7" height="7" rx="1"/><rect x="168" y="52" width="7" height="7" rx="1"/><rect x="178" y="52" width="7" height="7" rx="1"/><rect x="188" y="52" width="7" height="7" rx="1"/><rect x="198" y="52" width="7" height="7" rx="1"/><rect x="208" y="52" width="7" height="7" rx="1"/><rect x="218" y="52" width="7" height="7" rx="1"/><rect x="228" y="52" width="7" height="7" rx="1"/><rect x="238" y="52" width="7" height="7" rx="1"/><rect x="248" y="52" width="7" height="7" rx="1"/><rect x="258" y="52" width="7" height="7" rx="1"/>
+      <!-- Row 4 --><rect x="18" y="62" width="7" height="7" rx="1"/><rect x="28" y="62" width="7" height="7" rx="1"/><rect x="38" y="62" width="7" height="7" rx="1"/><rect x="48" y="62" width="7" height="7" rx="1"/><rect x="58" y="62" width="7" height="7" rx="1"/><rect x="68" y="62" width="7" height="7" rx="1"/><rect x="78" y="62" width="7" height="7" rx="1"/><rect x="88" y="62" width="7" height="7" rx="1"/><rect x="98" y="62" width="7" height="7" rx="1"/><rect x="108" y="62" width="7" height="7" rx="1"/><rect x="118" y="62" width="7" height="7" rx="1"/><rect x="128" y="62" width="7" height="7" rx="1"/><rect x="138" y="62" width="7" height="7" rx="1"/><rect x="148" y="62" width="7" height="7" rx="1"/><rect x="158" y="62" width="7" height="7" rx="1"/><rect x="168" y="62" width="7" height="7" rx="1"/><rect x="178" y="62" width="7" height="7" rx="1"/><rect x="188" y="62" width="7" height="7" rx="1"/><rect x="198" y="62" width="7" height="7" rx="1"/><rect x="208" y="62" width="7" height="7" rx="1"/><rect x="218" y="62" width="7" height="7" rx="1"/><rect x="228" y="62" width="7" height="7" rx="1"/><rect x="238" y="62" width="7" height="7" rx="1"/><rect x="248" y="62" width="7" height="7" rx="1"/><rect x="258" y="62" width="7" height="7" rx="1"/>
+      <!-- Row 5 --><rect x="18" y="72" width="7" height="7" rx="1"/><rect x="28" y="72" width="7" height="7" rx="1"/><rect x="38" y="72" width="7" height="7" rx="1"/><rect x="48" y="72" width="7" height="7" rx="1"/><rect x="58" y="72" width="7" height="7" rx="1"/><rect x="68" y="72" width="7" height="7" rx="1"/><rect x="78" y="72" width="7" height="7" rx="1"/><rect x="88" y="72" width="7" height="7" rx="1"/><rect x="98" y="72" width="7" height="7" rx="1"/><rect x="108" y="72" width="7" height="7" rx="1"/><rect x="118" y="72" width="7" height="7" rx="1"/><rect x="128" y="72" width="7" height="7" rx="1"/><rect x="138" y="72" width="7" height="7" rx="1"/><rect x="148" y="72" width="7" height="7" rx="1"/><rect x="158" y="72" width="7" height="7" rx="1"/><rect x="168" y="72" width="7" height="7" rx="1"/><rect x="178" y="72" width="7" height="7" rx="1"/><rect x="188" y="72" width="7" height="7" rx="1"/><rect x="198" y="72" width="7" height="7" rx="1"/><rect x="208" y="72" width="7" height="7" rx="1"/><rect x="218" y="72" width="7" height="7" rx="1"/><rect x="228" y="72" width="7" height="7" rx="1"/><rect x="238" y="72" width="7" height="7" rx="1"/><rect x="248" y="72" width="7" height="7" rx="1"/><rect x="258" y="72" width="7" height="7" rx="1"/>
+      <!-- Row 6 --><rect x="18" y="82" width="7" height="7" rx="1"/><rect x="28" y="82" width="7" height="7" rx="1"/><rect x="38" y="82" width="7" height="7" rx="1"/><rect x="48" y="82" width="7" height="7" rx="1"/><rect x="58" y="82" width="7" height="7" rx="1"/><rect x="68" y="82" width="7" height="7" rx="1"/><rect x="78" y="82" width="7" height="7" rx="1"/><rect x="88" y="82" width="7" height="7" rx="1"/><rect x="98" y="82" width="7" height="7" rx="1"/><rect x="108" y="82" width="7" height="7" rx="1"/><rect x="118" y="82" width="7" height="7" rx="1"/><rect x="128" y="82" width="7" height="7" rx="1"/><rect x="138" y="82" width="7" height="7" rx="1"/><rect x="148" y="82" width="7" height="7" rx="1"/><rect x="158" y="82" width="7" height="7" rx="1"/><rect x="168" y="82" width="7" height="7" rx="1"/><rect x="178" y="82" width="7" height="7" rx="1"/><rect x="188" y="82" width="7" height="7" rx="1"/><rect x="198" y="82" width="7" height="7" rx="1"/><rect x="208" y="82" width="7" height="7" rx="1"/><rect x="218" y="82" width="7" height="7" rx="1"/><rect x="228" y="82" width="7" height="7" rx="1"/><rect x="238" y="82" width="7" height="7" rx="1"/><rect x="248" y="82" width="7" height="7" rx="1"/><rect x="258" y="82" width="7" height="7" rx="1"/>
+      <!-- Row 7 --><rect x="18" y="92" width="7" height="7" rx="1"/><rect x="28" y="92" width="7" height="7" rx="1"/><rect x="38" y="92" width="7" height="7" rx="1"/><rect x="48" y="92" width="7" height="7" rx="1"/><rect x="58" y="92" width="7" height="7" rx="1"/><rect x="68" y="92" width="7" height="7" rx="1"/><rect x="78" y="92" width="7" height="7" rx="1"/><rect x="88" y="92" width="7" height="7" rx="1"/><rect x="98" y="92" width="7" height="7" rx="1"/><rect x="108" y="92" width="7" height="7" rx="1"/><rect x="118" y="92" width="7" height="7" rx="1"/><rect x="128" y="92" width="7" height="7" rx="1"/><rect x="138" y="92" width="7" height="7" rx="1"/><rect x="148" y="92" width="7" height="7" rx="1"/><rect x="158" y="92" width="7" height="7" rx="1"/><rect x="168" y="92" width="7" height="7" rx="1"/><rect x="178" y="92" width="7" height="7" rx="1"/><rect x="188" y="92" width="7" height="7" rx="1"/><rect x="198" y="92" width="7" height="7" rx="1"/><rect x="208" y="92" width="7" height="7" rx="1"/><rect x="218" y="92" width="7" height="7" rx="1"/><rect x="228" y="92" width="7" height="7" rx="1"/><rect x="238" y="92" width="7" height="7" rx="1"/><rect x="248" y="92" width="7" height="7" rx="1"/><rect x="258" y="92" width="7" height="7" rx="1"/>
+      <!-- Row 8 --><rect x="18" y="102" width="7" height="7" rx="1"/><rect x="28" y="102" width="7" height="7" rx="1"/><rect x="38" y="102" width="7" height="7" rx="1"/><rect x="48" y="102" width="7" height="7" rx="1"/><rect x="58" y="102" width="7" height="7" rx="1"/><rect x="68" y="102" width="7" height="7" rx="1"/><rect x="78" y="102" width="7" height="7" rx="1"/><rect x="88" y="102" width="7" height="7" rx="1"/><rect x="98" y="102" width="7" height="7" rx="1"/><rect x="108" y="102" width="7" height="7" rx="1"/><rect x="118" y="102" width="7" height="7" rx="1"/><rect x="128" y="102" width="7" height="7" rx="1"/><rect x="138" y="102" width="7" height="7" rx="1"/><rect x="148" y="102" width="7" height="7" rx="1"/><rect x="158" y="102" width="7" height="7" rx="1"/><rect x="168" y="102" width="7" height="7" rx="1"/><rect x="178" y="102" width="7" height="7" rx="1"/><rect x="188" y="102" width="7" height="7" rx="1"/><rect x="198" y="102" width="7" height="7" rx="1"/><rect x="208" y="102" width="7" height="7" rx="1"/><rect x="218" y="102" width="7" height="7" rx="1"/><rect x="228" y="102" width="7" height="7" rx="1"/><rect x="238" y="102" width="7" height="7" rx="1"/><rect x="248" y="102" width="7" height="7" rx="1"/><rect x="258" y="102" width="7" height="7" rx="1"/>
+    </g>
+    <!-- Error qubits -->
+    <g fill="#E24B4A" opacity="0.9">
+      <rect x="48"  y="42"  width="7" height="7" rx="1"/>
+      <rect x="118" y="62"  width="7" height="7" rx="1"/>
+      <rect x="78"  y="82"  width="7" height="7" rx="1"/>
+      <rect x="168" y="52"  width="7" height="7" rx="1"/>
+      <rect x="208" y="92"  width="7" height="7" rx="1"/>
+      <rect x="138" y="72"  width="7" height="7" rx="1"/>
+      <rect x="38"  y="102" width="7" height="7" rx="1"/>
+    </g>
+    <text x="130" y="122" font-size="11" fill="#A32D2D" text-anchor="middle">Red = decoherence error</text>
+    <!-- Arrow -->
+    <line x1="272" y1="72" x2="316" y2="72" stroke="#888" stroke-width="1" marker-end="url(#qo-arrow)"/>
+    <text x="294" y="64" font-size="11" fill="#888" text-anchor="middle">Error</text>
+    <text x="294" y="82" font-size="11" fill="#888" text-anchor="middle">correction</text>
+    <!-- Right label -->
+    <text x="510" y="22" font-size="13" font-weight="500" fill="#222" text-anchor="middle">1 logical qubit</text>
+    <text x="510" y="38" font-size="11" fill="#888" text-anchor="middle">~1,000 physical qubits (surface code)</text>
+    <!-- Surface code grid 19×5 teal dots -->
+    <g fill="#1DA075" opacity="0.8">
+      <!-- 5 rows × 19 cols, dot 9×9, gap 3, start x=328 y=46 -->
+      <rect x="328" y="46" width="9" height="9" rx="2"/><rect x="340" y="46" width="9" height="9" rx="2"/><rect x="352" y="46" width="9" height="9" rx="2"/><rect x="364" y="46" width="9" height="9" rx="2"/><rect x="376" y="46" width="9" height="9" rx="2"/><rect x="388" y="46" width="9" height="9" rx="2"/><rect x="400" y="46" width="9" height="9" rx="2"/><rect x="412" y="46" width="9" height="9" rx="2"/><rect x="424" y="46" width="9" height="9" rx="2"/><rect x="436" y="46" width="9" height="9" rx="2"/><rect x="448" y="46" width="9" height="9" rx="2"/><rect x="460" y="46" width="9" height="9" rx="2"/><rect x="472" y="46" width="9" height="9" rx="2"/><rect x="484" y="46" width="9" height="9" rx="2"/><rect x="496" y="46" width="9" height="9" rx="2"/><rect x="508" y="46" width="9" height="9" rx="2"/><rect x="520" y="46" width="9" height="9" rx="2"/><rect x="532" y="46" width="9" height="9" rx="2"/><rect x="544" y="46" width="9" height="9" rx="2"/>
+      <rect x="328" y="58" width="9" height="9" rx="2"/><rect x="340" y="58" width="9" height="9" rx="2"/><rect x="352" y="58" width="9" height="9" rx="2"/><rect x="364" y="58" width="9" height="9" rx="2"/><rect x="376" y="58" width="9" height="9" rx="2"/><rect x="388" y="58" width="9" height="9" rx="2"/><rect x="400" y="58" width="9" height="9" rx="2"/><rect x="412" y="58" width="9" height="9" rx="2"/><rect x="424" y="58" width="9" height="9" rx="2"/><rect x="436" y="58" width="9" height="9" rx="2"/><rect x="448" y="58" width="9" height="9" rx="2"/><rect x="460" y="58" width="9" height="9" rx="2"/><rect x="472" y="58" width="9" height="9" rx="2"/><rect x="484" y="58" width="9" height="9" rx="2"/><rect x="496" y="58" width="9" height="9" rx="2"/><rect x="508" y="58" width="9" height="9" rx="2"/><rect x="520" y="58" width="9" height="9" rx="2"/><rect x="532" y="58" width="9" height="9" rx="2"/><rect x="544" y="58" width="9" height="9" rx="2"/>
+      <rect x="328" y="70" width="9" height="9" rx="2"/><rect x="340" y="70" width="9" height="9" rx="2"/><rect x="352" y="70" width="9" height="9" rx="2"/><rect x="364" y="70" width="9" height="9" rx="2"/><rect x="376" y="70" width="9" height="9" rx="2"/><rect x="388" y="70" width="9" height="9" rx="2"/><rect x="400" y="70" width="9" height="9" rx="2"/><rect x="412" y="70" width="9" height="9" rx="2"/><rect x="424" y="70" width="9" height="9" rx="2"/><rect x="436" y="70" width="9" height="9" rx="2"/><rect x="448" y="70" width="9" height="9" rx="2"/><rect x="460" y="70" width="9" height="9" rx="2"/><rect x="472" y="70" width="9" height="9" rx="2"/><rect x="484" y="70" width="9" height="9" rx="2"/><rect x="496" y="70" width="9" height="9" rx="2"/><rect x="508" y="70" width="9" height="9" rx="2"/><rect x="520" y="70" width="9" height="9" rx="2"/><rect x="532" y="70" width="9" height="9" rx="2"/><rect x="544" y="70" width="9" height="9" rx="2"/>
+      <rect x="328" y="82" width="9" height="9" rx="2"/><rect x="340" y="82" width="9" height="9" rx="2"/><rect x="352" y="82" width="9" height="9" rx="2"/><rect x="364" y="82" width="9" height="9" rx="2"/><rect x="376" y="82" width="9" height="9" rx="2"/><rect x="388" y="82" width="9" height="9" rx="2"/><rect x="400" y="82" width="9" height="9" rx="2"/><rect x="412" y="82" width="9" height="9" rx="2"/><rect x="424" y="82" width="9" height="9" rx="2"/><rect x="436" y="82" width="9" height="9" rx="2"/><rect x="448" y="82" width="9" height="9" rx="2"/><rect x="460" y="82" width="9" height="9" rx="2"/><rect x="472" y="82" width="9" height="9" rx="2"/><rect x="484" y="82" width="9" height="9" rx="2"/><rect x="496" y="82" width="9" height="9" rx="2"/><rect x="508" y="82" width="9" height="9" rx="2"/><rect x="520" y="82" width="9" height="9" rx="2"/><rect x="532" y="82" width="9" height="9" rx="2"/><rect x="544" y="82" width="9" height="9" rx="2"/>
+      <rect x="328" y="94" width="9" height="9" rx="2"/><rect x="340" y="94" width="9" height="9" rx="2"/><rect x="352" y="94" width="9" height="9" rx="2"/><rect x="364" y="94" width="9" height="9" rx="2"/><rect x="376" y="94" width="9" height="9" rx="2"/><rect x="388" y="94" width="9" height="9" rx="2"/><rect x="400" y="94" width="9" height="9" rx="2"/><rect x="412" y="94" width="9" height="9" rx="2"/><rect x="424" y="94" width="9" height="9" rx="2"/><rect x="436" y="94" width="9" height="9" rx="2"/><rect x="448" y="94" width="9" height="9" rx="2"/><rect x="460" y="94" width="9" height="9" rx="2"/><rect x="472" y="94" width="9" height="9" rx="2"/><rect x="484" y="94" width="9" height="9" rx="2"/><rect x="496" y="94" width="9" height="9" rx="2"/><rect x="508" y="94" width="9" height="9" rx="2"/><rect x="520" y="94" width="9" height="9" rx="2"/><rect x="532" y="94" width="9" height="9" rx="2"/><rect x="544" y="94" width="9" height="9" rx="2"/>
+    </g>
+    <!-- Logical qubit border -->
+    <rect x="324" y="42" width="234" height="66" rx="6" fill="none" stroke="#1DA075" stroke-width="1.5" stroke-dasharray="5 3"/>
+    <text x="441" y="124" font-size="11" fill="#0F6E56" text-anchor="middle">All working together as one reliable qubit</text>
+    <!-- Callout banner -->
+    <rect x="60" y="148" width="560" height="52" rx="8" fill="#FAEEDA" stroke="#BA7517" stroke-width="0.5"/>
+    <text x="340" y="170" font-size="13" font-weight="500" fill="#4A1B0C" text-anchor="middle">IBM Condor: 1,000+ physical qubits</text>
+    <text x="340" y="188" font-size="12" fill="#633806" text-anchor="middle">With surface code error correction, that is roughly 1 reliable logical qubit for serious computation</text>
+    <text x="340" y="222" font-size="12" fill="#888" text-anchor="middle">Every "X-qubit machine" headline needs this context.</text>
+  </svg>
+</div>`,
+ 
+};
+
 // Blog post content from Bob migration project
 export const orchjiragmail = `# Connecting Gmail and Jira to watsonx Orchestrate: A Complete OAuth2 Setup Guide
 

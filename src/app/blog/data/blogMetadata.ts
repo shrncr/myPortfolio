@@ -1,4 +1,4 @@
-import { blogContent, orchjiragmail } from './blogContent';
+import { blogContent, orchjiragmail, quantum, widgets} from './blogContent';
 
 export interface BlogPost {
   id: string;
@@ -11,6 +11,8 @@ export interface BlogPost {
   content: string;
   hasDemo: boolean;
   featured: boolean;
+  hasWidgets: boolean;
+  widgets: Record<string, string>;
 }
 
 export const blogs: BlogPost[] = [
@@ -24,7 +26,9 @@ export const blogs: BlogPost[] = [
     readTime: '15 min read',
     content: blogContent,
     hasDemo: true,
-    featured: true
+    featured: true,
+    hasWidgets: false,
+    widgets: {}
   },
   {
     id: 'orch-jira-gmail',
@@ -36,7 +40,23 @@ export const blogs: BlogPost[] = [
     readTime: '15 min read',
     content: orchjiragmail,
     hasDemo: false,
-    featured: true
+    featured: false,
+    hasWidgets: false,
+    widgets: {}
+  },
+  {
+    id: 'quantum1',
+    title: 'A Better Question Than P Versus NP',
+    slug: 'quantum',
+    date: '2026-03-17',
+    excerpt: 'A walkthrough of my experience connecting a watsonx Orchestrate instance to the pre-built Jira and Google tools/agents',
+    tags: ['Quantum Computing', 'Complexity Theory', 'P Versus NP', 'Harvest Now, Decrypt Later'],
+    readTime: '35 min read',
+    content: quantum,
+    hasDemo: false,
+    featured: true, 
+    hasWidgets: true,
+    widgets: widgets
   }
   // Add more blog posts here in the future
 ];

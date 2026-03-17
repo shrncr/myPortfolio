@@ -135,7 +135,10 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
 
       {/* Blog Content */}
       <section className="bg-white py-16">
-        <BlogContent content={blog.content} />
+        <BlogContent
+          content={blog.content}
+          widgets={blog.hasWidgets ? blog.widgets : undefined}
+        />
       </section>
 
       {/* Footer Navigation */}
