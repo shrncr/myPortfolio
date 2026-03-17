@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import NextImage from 'next/image';
+import type { ComponentPropsWithoutRef } from 'react'
 
 interface BlogContentProps {
   content: string;
@@ -107,34 +108,31 @@ export default function BlogContent({ content, widgets }: BlogContentProps) {
     contentParts.push({ type: 'markdown', content });
   }
 
-  const markdownComponents = {
-    // H1: Large, bold, extra spacing
-    h1: ({ children }: any) => (
-      <h1 className="font-sans text-5xl font-extrabold text-neutral-900 mt-16 mb-6 leading-tight tracking-tight first:mt-0">
-        {children}
-      </h1>
-    ),
-    
-    // H2: Section headers with subtle border
-    h2: ({ children }: any) => (
-      <h2 className="font-sans text-3xl font-bold text-neutral-900 mt-16 mb-6 pb-3 border-b border-neutral-200 flex flex-wrap items-baseline gap-1">
-        {children}
-      </h2>
-    ),
-    
-    // H3: Subsection headers
-    h3: ({ children }: any) => (
-      <h3 className="font-sans text-2xl font-semibold text-neutral-900 mt-12 mb-4 flex flex-wrap items-baseline gap-1">
-        {children}
-      </h3>
-    ),
-    
-    // H4: Minor headers
-    h4: ({ children }: any) => (
-      <h4 className="font-sans text-xl font-semibold text-neutral-800 mt-8 mb-3 flex flex-wrap items-baseline gap-1">
-        {children}
-      </h4>
-    ),
+
+const markdownComponents = {
+  h1: ({ children }: ComponentPropsWithoutRef<'h1'>) => (
+    <h1 className="font-sans text-5xl font-extrabold text-neutral-900 mt-16 mb-6 leading-tight tracking-tight first:mt-0">
+      {children}
+    </h1>
+  ),
+
+  h2: ({ children }: ComponentPropsWithoutRef<'h2'>) => (
+    <h2 className="font-sans text-3xl font-bold text-neutral-900 mt-16 mb-6 pb-3 border-b border-neutral-200 flex flex-wrap items-baseline gap-1">
+      {children}
+    </h2>
+  ),
+
+  h3: ({ children }: ComponentPropsWithoutRef<'h3'>) => (
+    <h3 className="font-sans text-2xl font-semibold text-neutral-900 mt-12 mb-4 flex flex-wrap items-baseline gap-1">
+      {children}
+    </h3>
+  ),
+
+  h4: ({ children }: ComponentPropsWithoutRef<'h4'>) => (
+    <h4 className="font-sans text-xl font-semibold text-neutral-800 mt-8 mb-3 flex flex-wrap items-baseline gap-1">
+      {children}
+    </h4>
+  ),
     
     // Paragraphs: Generous line height and spacing
     p: ({ children }: any) => (
