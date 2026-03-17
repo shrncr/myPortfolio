@@ -49,7 +49,7 @@ export const blogs: BlogPost[] = [
     title: 'A Better Question Than P Versus NP',
     slug: 'quantum',
     date: '2026-03-17',
-    excerpt: 'A walkthrough of my experience connecting a watsonx Orchestrate instance to the pre-built Jira and Google tools/agents',
+    excerpt: 'A practical overview of quantum computing: the complexity theory behind it, the algorithms that work, and where the hardware stands today.',
     tags: ['Quantum Computing', 'Complexity Theory', 'P Versus NP', 'Harvest Now, Decrypt Later'],
     readTime: '35 min read',
     content: quantum,
